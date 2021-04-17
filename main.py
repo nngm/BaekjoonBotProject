@@ -22,8 +22,12 @@ def get_help_message(message) -> str:
         descr = f'Prefix for this server is `{prefixes[server_id]}`.'
     else:
         descr = f'Prefix for this server is `{basic_command_prefix}`.'
-    descr += '\n' + '`/[problem number]`'
-    descr += '\n' + 'ex) `/1000`'
+    descr += '\n```'
+    descr += '/prefix [new prefix]\n'
+    descr += 'ex) /prefix !\n\n'
+    descr += '/[problem number]\n'
+    descr += 'ex) /1000\n'
+    descr += '```'
     return descr
 
 bot = commands.Bot(
