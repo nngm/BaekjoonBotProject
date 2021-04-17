@@ -60,10 +60,6 @@ async def on_command_error(ctx, error):
     raise error
 
 @bot.command()
-async def ping(ctx):    # ping
-    await ctx.send('pong')
-
-@bot.command()
 async def prefix(ctx):  # change prefix
     server_id = str(ctx.guild.id)
     
@@ -95,20 +91,15 @@ async def on_message(message):
     
     if message.content == help_command or message.content.startswith(help_command + ' '):
         await message.channel.send(get_help_message(message))
-    
+
+    command_prefix = prefixes[str(message.guild.id)] if str(message.guild.id) in prefixes\
+                     else basic_command_prefix
+
+    if message.content.startswith(command_prefix) and message.content[1:].isdecimal():
+        url = r'https://www.acmicpc.net/problem/' + message.content[1:]
+        await message.channel.send(url)
+
     await bot.process_commands(message)
-
-@bot.command()
-async def 오목(ctx):
-    # cmd = {'뜨자': omok.request}
-    
-    try:
-        argv = ctx.message.content.split()
-
-
-    except:
-        await ctx.send(f'Type `{help_command} 오목` for usage.')
-        return
 
 if __name__ == '__main__':
     bot.run(__token__.get_token())
