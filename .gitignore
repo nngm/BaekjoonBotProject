@@ -1,6 +1,9 @@
 # 토큰 보호
 __token__.py
 
+# prefix info per servers
+prefixes.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
