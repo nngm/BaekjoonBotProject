@@ -34,6 +34,8 @@ def get_help_message(message) -> str:
     descr += '\n/step (step number)\n'
     descr += 'ex) /step\n'
     descr += 'ex) /step 1\n'
+    descr += '\n/user [user name]\n'
+    descr += 'ex) /user startlink\n'
     descr += '```'
     return descr
 
