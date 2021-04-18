@@ -119,6 +119,39 @@ async def step(ctx):    # https://www.acmicpc.net/step
             embed.set_author(name=title, url=url)
             await ctx.send(content=url, embed=embed)
 
+@bot.command(aliases=['u'])
+async def user(ctx):    # user profile
+    bj_url = r"https://www.acmicpc.net/user/"
+    sv_url = r"https://solved.ac/profile/"
+
+    try:
+        user_name = ctx.message.content.split()[1]
+    except:
+        await ctx.send(f'Type `{help_command} user` for usage.')
+        return
+    
+    bj_url += user_name
+    sv_url += user_name
+
+    bj_page = requests.get(bj_url)
+    bj_soup = BeautifulSoup(bj_page.content, 'html.parser')
+    sv_page = requests.get(sv_url)
+    sv_soup = BeautifulSoup(sv_page.content, 'html.parser')
+
+    message = bj_url
+
+    if bj.is404(bj_soup.title.string):
+        embed = bj.embed_404()
+    else:
+        embed = discord.Embed()
+        embed.set_author(name=user_name, url=bj_url)
+        # tier
+    
+    # if not sv 404
+    message += '\n' + sv_url
+
+    ctx.send(content=message, embed=embed)
+
 @bot.event
 async def on_message(message):
     if message.author.bot:
