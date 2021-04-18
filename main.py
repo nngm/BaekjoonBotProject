@@ -150,7 +150,7 @@ async def user(ctx):    # user profile
     # if not sv 404
     message += '\n' + sv_url
 
-    ctx.send(content=message, embed=embed)
+    await ctx.send(content=message, embed=embed)
 
 @bot.event
 async def on_message(message):
