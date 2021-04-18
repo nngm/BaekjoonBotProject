@@ -1,11 +1,12 @@
 import asyncio
-import logger
 import json
 
 import discord
 from discord.ext import commands
 
 import __token__
+import logger
+import baekjoon as bj
 
 basic_command_prefix = '/'
 bot_name = 'BaekjooneBot'
@@ -103,9 +104,11 @@ async def on_message(message):
     command_prefix = prefixes[str(message.guild.id)] if str(message.guild.id) in prefixes\
                      else basic_command_prefix
 
-    if message.content.startswith(command_prefix) and message.content[1:].isdecimal():
-        url = r'https://www.acmicpc.net/problem/' + message.content[1:]
-        await message.channel.send(url)
+    if message.content.startswith(command_prefix) and bj.isvalid(message.content[1:]):
+        problem_number = message.content[1:]
+        url = bj.get_url(problem_number)
+        embed = bj.get_embed(problem_number)
+        await message.channel.send(content=url, embed=embed)
 
     await bot.process_commands(message)
 
