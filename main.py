@@ -98,7 +98,7 @@ async def prefix(ctx):  # change prefix
     else:
         await ctx.send(f'Prefix for this server changed to `{new_prefix}`')
 
-@bot.command()
+@bot.command(aliases=['s'])
 async def step(ctx):    # https://www.acmicpc.net/step
     dic = [0, 1, 4, 3, 2, 6, 5, 7, 8, 10, 19, 22, 9, 49, 34, 16, 33, 18, 11, 12, 20,
            29, 13, 17, 24, 26, 59, 41, 23, 14, 15, 21, 45, 31, 27, 25, 40, 43, 35, 39, 47,
