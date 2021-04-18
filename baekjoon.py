@@ -8,6 +8,47 @@ color = {"Not": 0x2d2d2d, "Unrated": 0x2d2d2d, "Bronze": 0xad5600,
          "Silver": 0x435f7a, "Gold": 0xec9a00, "Platinum": 0x27e2a4,
          "Diamond": 0x0094fc, "Ruby": 0xff0062}
 
+emoji = {"Unrated": "<:unranked:833235211181490186>", 
+         "Not ratable": "<:notratable:833235211121852427>",
+         "Bronze V": "<:bronze5:833235210476191764>",
+         "Bronze IV": "<:bronze4:833235210380247050>",
+         "Bronze III": "<:bronze3:833235210627186688>",
+         "Bronze II": "<:bronze2:833235210187046922>",
+         "Bronze I": "<:bronze1:833235209608364053>",
+         "Silver V": "<:silver5:833235211213865010>",
+         "Silver IV": "<:silver4:833235210908336158>",
+         "Silver III": "<:silver3:833235210920525835>",
+         "Silver II": "<:silver2:833235211121983518>",
+         "Silver I": "<:silver1:833235211051204628>",
+         "Gold V": "<:gold5:833235210715529227>",
+         "Gold IV": "<:gold4:833235210534387763>",
+         "Gold III": "<:gold3:833235210945691648>",
+         "Gold II": "<:gold2:833235210468196383>",
+         "Gold I": "<:gold1:833235210408689665>",
+         "Platinum V": "<:platinum5:833235211151212544>",
+         "Platinum IV": "<:platinum4:833235210925244466>",
+         "Platinum III": "<:platinum3:833235211155537951>",
+         "Platinum II": "<:platinum2:833235210757734431>",
+         "Platinum I": "<:platinum1:833235210996416522>",
+         "Diamond V": "<:diamond5:833235209931456573>",
+         "Diamond IV": "<:diamond4:833235209977724939>",
+         "Diamond III": "<:diamond3:833235210346692608>",
+         "Diamond II": "<:diamond2:833235210346561536>",
+         "Diamond I": "<:diamond1:833235210165682206>",
+         "Ruby V": "<:ruby5:833235211164450836>",
+         "Ruby IV": "<:ruby4:833235210858004480>",
+         "Ruby III": "<:ruby3:833235211121852437>",
+         "Ruby II": "<:ruby2:833235211021058050>",
+         "Ruby I": "<:ruby1:833235210958929940>"}
+
+def rom2num(number: str) -> str:
+    number = re.sub(' v$', '5', number)
+    number = re.sub(' iv$', '4', number)
+    number = re.sub(' iii$', '3', number)
+    number = re.sub(' ii$', '2', number)
+    number = re.sub(' i$', '1', number)
+    return number
+
 def is404(title: str) -> bool:
     if title == "Baekjoon Online Judge":
         return True
@@ -41,9 +82,10 @@ def get_embed(number: str):
     tier = re.sub('" class=".*$', '', str(sv_soup.img))[10:]
     tier_color = color[tier.split()[0]]
     tier_icon = re.sub('^.*src="', '', str(sv_soup.img))[0:-3]
+    tier_emoji = emoji[tier] + ' '
 
-    embed = discord.Embed(title=title, description=tier, color=tier_color)
-    embed.set_author(name=number, url=get_url(number), icon_url=tier_icon)
+    embed = discord.Embed(title=title, description=tier_emoji+tier, color=tier_color)
+    embed.set_author(name=number, url=get_url(number))
     embed.set_thumbnail(url=tier_icon)
     # embed.add_field(name="제출", value="12074", inline=True)
     # embed.add_field(name="정답", value="5689", inline=True)
