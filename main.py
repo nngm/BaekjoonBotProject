@@ -1,6 +1,8 @@
 import asyncio
 import json
 
+import requests
+from bs4 import BeautifulSoup
 import discord
 from discord.ext import commands
 
@@ -109,7 +111,13 @@ async def step(ctx):    # https://www.acmicpc.net/step
         if num == 0:
             await ctx.send(url)
         elif num <= 50:
-            await ctx.send(url + '/' + str(dic[num]))
+            url += '/' + str(dic[num])
+            page = requests.get(url)
+            soup = BeautifulSoup(page.content, 'html.parser')
+            title = soup.title.string
+            embed = discord.Embed()
+            embed.set_author(name=title, url=url)
+            await ctx.send(content=url, embed=embed)
 
 @bot.event
 async def on_message(message):
