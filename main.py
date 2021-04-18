@@ -15,6 +15,7 @@ bot_name = 'BaekjooneBot'
 bot_initial = 'BB'
 prefix_file_name = 'prefixes.json'
 help_command = basic_command_prefix + 'help'
+init_command = basic_command_prefix + 'init'
 prefixes = {}
 
 def get_help_message(message) -> str:
@@ -159,6 +160,11 @@ async def on_message(message):
     
     if message.content == help_command or message.content.startswith(help_command + ' '):
         await message.channel.send(get_help_message(message))
+
+    if message.content == init_command:
+        server_id = str(message.guild.id)
+        print('command initialized in', server_id)
+        prefixes[server_id] = '/'
 
     command_prefix = prefixes[str(message.guild.id)] if str(message.guild.id) in prefixes\
                      else basic_command_prefix
