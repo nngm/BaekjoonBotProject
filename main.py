@@ -155,6 +155,24 @@ async def user(ctx):    # user profile
 
     await ctx.send(content=message, embed=embed)
 
+@bot.command(aliases=['class'])
+async def c(ctx):   # solved.ac/class
+    url = r"https://solved.ac/class"
+    if len(ctx.message.content.split()) == 1:
+        await ctx.send(url)
+    elif ctx.message.content.split()[1].isdecimal():
+        num = int(ctx.message.content.split()[1])
+        if num == 0:
+            await ctx.send(url)
+        elif num <= 10:
+            url += '/' + str(num)
+            # page = requests.get(url)
+            # soup = BeautifulSoup(page.content, 'html.parser')
+            # title = soup.title.string
+            embed = discord.Embed()
+            embed.set_author(name='CLASS ' + str(num), url=url)
+            await ctx.send(content=url, embed=embed)
+
 @bot.event
 async def on_message(message):
     if message.author.bot:
