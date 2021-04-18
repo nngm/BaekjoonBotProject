@@ -59,7 +59,7 @@ def isvalid(number: str) -> bool:
     return number.isdecimal()
 
 def get_url(number: str) -> str:
-    return r"https://www.acmicpc.net/problem/" + number
+    return r"https://www.acmicpc.net/problem/" + str(int(number))
 
 def embed_404():
     embed=discord.Embed()
@@ -67,6 +67,7 @@ def embed_404():
     return embed
 
 def get_embed(number: str):
+    number = str(int(number))
     url = get_url(number)
     
     bj_page = requests.get(url)
