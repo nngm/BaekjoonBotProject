@@ -28,6 +28,9 @@ def get_help_message(message) -> str:
     descr += 'ex) /prefix !\n\n'
     descr += '/[problem number]\n'
     descr += 'ex) /1000\n'
+    descr += '/step (step number)\n'
+    descr += 'ex) /step\n'
+    descr += 'ex) /step 1\n'
     descr += '```'
     return descr
 
