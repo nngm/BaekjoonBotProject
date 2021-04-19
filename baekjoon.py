@@ -81,6 +81,8 @@ def get_embed(number: str):
     
     title = re.sub("^[0-9]+번: ", '', html_title)
     tier = re.sub('" class=".*$', '', str(sv_soup.img))[10:]
+    if number == '9999':
+        tier = 'Not ratable'
     tier_color = color[tier.split()[0]]
     tier_icon = re.sub('^.*src="', '', str(sv_soup.img))[0:-3]
     tier_emoji = emoji[tier] + ' '
