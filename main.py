@@ -126,7 +126,7 @@ async def step(ctx):    # https://www.acmicpc.net/step
             soup = BeautifulSoup(page.content, 'html.parser')
             title = soup.title.string
             embed = discord.Embed()
-            embed.set_author(name=title, url=url)
+            embed.set_author(name=f'{num}. ' + title, url=url)
             await ctx.send(content=url, embed=embed)
 
 @bot.command(aliases=['u'])
