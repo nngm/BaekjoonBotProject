@@ -180,6 +180,10 @@ async def c(ctx):   # solved.ac/class
             embed.set_author(name='CLASS ' + str(num), url=url)
             await ctx.send(content=url, embed=embed)
 
+@bot.command(aliases=['repl'])
+async def replit(ctx):
+    await ctx.send(r"https://repl.it/")
+
 @bot.event
 async def on_message(message):
     if message.author.bot:
