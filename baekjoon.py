@@ -79,20 +79,33 @@ def get_embed(number: str):
     if is404(html_title):
         return embed_404()
     
-    title = re.sub("^[0-9]+번: ", '', html_title)
+    title = re.sub('^[0-9]+번: ', '', html_title)
     tier = re.sub('" class=".*$', '', str(sv_soup.img))[10:]
     if number == '9999':
         tier = 'Not ratable'
     tier_color = color[tier.split()[0]]
-    tier_icon = re.sub('^.*src="', '', str(sv_soup.img))[0:-3]
+    tier_icon = re.sub('^.*src="', '', str(sv_soup.img))[:-3]
     tier_emoji = emoji[tier] + ' '
 
     embed = discord.Embed(title=title, description=tier_emoji+tier, color=tier_color)
     embed.set_author(name=number, url=get_url(number))
     embed.set_thumbnail(url=tier_icon)
+
+    # https://mochalatte.dev/posts/today-i-learned/programming/py-crawling-request
+
+    # row_tag = bj_soup.select_one('body > div.wrapper > div.container.content > div.row ')
+    # if re.search('<section id="problem_tags">', str(row_tag)):
+    #     text = '분류: '
+    #     pattern = '<a href="/problem/tag/[0-9]+" class="spoiler-link">.+</a>'
+        
+    #     for tag in re.findall(re.search(pattern, str(row_tag))):
+    #         pattern2 = '<a href="/problem/tag/[0-9]+" class="spoiler-link">'
+    #         text += re.sub(pattern2, '', tag)[:-4] + ', '
+        
+    #     embed.set_footer(text=text[:-2])
+        
     # embed.add_field(name="제출", value="12074", inline=True)
     # embed.add_field(name="정답", value="5689", inline=True)
     # embed.add_field(name="맞은 사람	", value="4115", inline=True)
     # embed.add_field(name="정답 비율", value="50.103%", inline=True)
-    # embed.set_footer(text="분류: ||스포일러||")
     return embed
