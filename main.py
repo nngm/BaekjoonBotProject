@@ -111,11 +111,15 @@ async def step(ctx):    # https://www.acmicpc.net/step
            37, 38, 36, 42, 44, 60, 28, 30, 32, 46]
     url = r"https://www.acmicpc.net/step"
     if len(ctx.message.content.split()) == 1:
-        await ctx.send(url)
+        embed = discord.Embed()
+        embed.set_author(name="단계별로 풀어보기", url=url)
+        await ctx.send(content=url, embed=embed)
     elif ctx.message.content.split()[1].isdecimal():
         num = int(ctx.message.content.split()[1])
         if num == 0:
-            await ctx.send(url)
+            embed = discord.Embed()
+            embed.set_author(name="단계별로 풀어보기", url=url)
+            await ctx.send(content=url, embed=embed)
         elif num <= 50:
             url += '/' + str(dic[num])
             page = requests.get(url)
