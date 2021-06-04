@@ -1,5 +1,6 @@
 import asyncio
 import json
+import datetime
 
 import requests
 from bs4 import BeautifulSoup
@@ -17,6 +18,7 @@ prefix_file_name = 'prefixes.json'
 help_command = basic_command_prefix + 'help'
 init_command = basic_command_prefix + 'init'
 prefixes = {}
+invite_link = r"https://discord.com/api/oauth2/authorize?client_id=833039423934431243&permissions=18432&scope=bot"
 
 def get_help_message(message) -> str:
     server_id = str(message.guild.id)
@@ -29,6 +31,8 @@ def get_help_message(message) -> str:
     descr += '\n```'
     descr += '/prefix [new prefix]\n'
     descr += 'ex) /prefix !\n'
+    descr += '\n/invite\n'
+    descr += 'for the invite link\n'
     descr += '\n/[problem number]\n'
     descr += 'ex) /1000\n'
     descr += '\n/step (step number)\n'
@@ -39,6 +43,11 @@ def get_help_message(message) -> str:
     descr += '\n/class (class number)\n'
     descr += 'ex) /class\n'
     descr += 'ex) /class 1\n'
+    descr += '\n*** 사이트 바로가기 ***\n'
+    descr += '/replit\n'
+    descr += '/ries\n'
+    descr += '/점투파\n'
+    descr += '/코딩도장\n'
     descr += '```'
     return descr
 
@@ -71,6 +80,7 @@ async def on_ready():
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
+    print(datetime.datetime.today().strftime('%Y-%m-%d %X'))
     print('------')
     
 @bot.event
@@ -183,6 +193,22 @@ async def c(ctx):   # solved.ac/class
 @bot.command(aliases=['repl'])
 async def replit(ctx):
     await ctx.send(r"https://repl.it/")
+
+@bot.command()
+async def ries(ctx):
+    await ctx.send(r"https://blog.naver.com/PostList.nhn?blogId=kks227&categoryNo=299")
+
+@bot.command()
+async def 점투파(ctx):
+    await ctx.send(r"https://wikidocs.net/book/1")
+
+@bot.command()
+async def 코딩도장(ctx):
+    await ctx.send(r"https://dojang.io/course/view.php?id=7")
+
+@bot.command()
+async def invite(ctx):
+    await ctx.send(invite_link)
 
 @bot.event
 async def on_message(message):
