@@ -206,7 +206,7 @@ async def 점투파(ctx):
 async def 코딩도장(ctx):
     await ctx.send(r"https://dojang.io/course/view.php?id=7")
 
-@bot.command()
+@bot.command(aliases=['invite_link'])
 async def invite(ctx):
     await ctx.send(invite_link)
 
