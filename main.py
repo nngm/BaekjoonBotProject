@@ -218,7 +218,7 @@ async def on_message(message):
     if message.content == help_command or message.content.startswith(help_command + ' '):
         await message.channel.send(get_help_message(message))
 
-    if message.content == init_command:
+    if message.content == init_command + ' ' + str(message.guild.id):
         server_id = str(message.guild.id)
         print('command initialized in', server_id)
         prefixes[server_id] = '/'
