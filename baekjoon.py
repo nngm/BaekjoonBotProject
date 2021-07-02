@@ -72,19 +72,19 @@ def get_embed(number: str):
     
     bj_page = requests.get(url)
     bj_soup = BeautifulSoup(bj_page.content, 'html.parser')
-    sv_page = requests.get(r"https://solved.ac/search?query=" + number)
-    sv_soup = BeautifulSoup(sv_page.content, 'html.parser')
+    ac_page = requests.get(r"https://solved.ac/search?query=" + number)
+    ac_soup = BeautifulSoup(ac_page.content, 'html.parser')
 
     html_title = bj_soup.title.string
     if is404(html_title):
         return embed_404()
     
     title = re.sub('^[0-9]+번: ', '', html_title)
-    tier = re.sub('" class=".*$', '', str(sv_soup.img))[10:]
+    tier = re.sub('" class=".*$', '', str(ac_soup.img))[10:]
     if number == '9999':
         tier = 'Not ratable'
     tier_color = color[tier.split()[0]]
-    tier_icon = re.sub('^.*src="', '', str(sv_soup.img))[:-3]
+    tier_icon = re.sub('^.*src="', '', str(ac_soup.img))[:-3]
     tier_emoji = emoji[tier] + ' '
 
     embed = discord.Embed(title=title, description=tier_emoji+tier, color=tier_color)

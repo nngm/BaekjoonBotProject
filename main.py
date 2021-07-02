@@ -142,7 +142,7 @@ async def step(ctx):    # https://www.acmicpc.net/step
 @bot.command(aliases=['u'])
 async def user(ctx):    # user profile
     bj_url = r"https://www.acmicpc.net/user/"
-    sv_url = r"https://solved.ac/profile/"
+    ac_url = r"https://solved.ac/profile/"
 
     try:
         user_name = ctx.message.content.split()[1]
@@ -151,12 +151,12 @@ async def user(ctx):    # user profile
         return
     
     bj_url += user_name
-    sv_url += user_name
+    ac_url += user_name
 
     bj_page = requests.get(bj_url)
     bj_soup = BeautifulSoup(bj_page.content, 'html.parser')
-    sv_page = requests.get(sv_url)
-    sv_soup = BeautifulSoup(sv_page.content, 'html.parser')
+    ac_page = requests.get(ac_url)
+    ac_soup = BeautifulSoup(ac_page.content, 'html.parser')
 
     message = bj_url
 
@@ -167,8 +167,8 @@ async def user(ctx):    # user profile
         embed.set_author(name=user_name, url=bj_url)
         # tier
     
-    # if not sv 404
-    message += '\n' + sv_url
+    # if not ac 404
+    message += '\n' + ac_url
 
     await ctx.send(content=message, embed=embed)
 
