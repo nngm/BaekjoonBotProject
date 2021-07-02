@@ -165,10 +165,11 @@ async def user(ctx):    # user profile
     else:
         embed = discord.Embed()
         embed.set_author(name=user_name, url=bj_url)
+        # if not bj.is_ac_404(str(ac_soup)):
         # tier
     
-    # if not ac 404
-    message += '\n' + ac_url
+    if not bj.is_ac_404(str(ac_soup)):
+        message += '\n' + ac_url
 
     await ctx.send(content=message, embed=embed)
 

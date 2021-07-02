@@ -55,6 +55,12 @@ def is404(title: str) -> bool:
     else:
         return False
 
+def is_ac_404(content: str) -> bool:
+    if re.search("<h1>404</h1><p>다음 중 하나의 오류가 발생했습니다.</p>", content) is None:
+        return False
+    else:
+        return True
+
 def isvalid(number: str) -> bool:
     return number.isdecimal()
 
