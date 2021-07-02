@@ -161,15 +161,16 @@ async def user(ctx):    # user profile
     message = bj_url
 
     if bj.is404(bj_soup.title.string):
-        embed = bj.embed_404()
+        embed = bj.embed_404('User')
     else:
-        embed = discord.Embed()
-        embed.set_author(name=user_name, url=bj_url)
-        # if not bj.is_ac_404(str(ac_soup)):
-        # tier
-    
-    if not bj.is_ac_404(str(ac_soup)):
-        message += '\n' + ac_url
+        tier = bj.get_ac_tier(str(ac_soup))
+        if tier is not None:
+            embed = bj.set_embed(user_name, tier)
+            message += '\n' + ac_url
+        else:
+            embed = discord.Embed(title=user_name)
+
+        embed.set_author(name='User', url=bj_url)
 
     await ctx.send(content=message, embed=embed)
 

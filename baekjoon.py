@@ -55,11 +55,13 @@ def is404(title: str) -> bool:
     else:
         return False
 
-def is_ac_404(content: str) -> bool:
-    if re.search("<h1>404</h1><p>다음 중 하나의 오류가 발생했습니다.</p>", content) is None:
-        return False
-    else:
-        return True
+def get_ac_tier(content: str) -> str:
+    tag = re.search('<div><div>AC RATING</div>.* -->[a-zA-Z]+ ?[a-zA-Z]*</span></div>', content)
+
+    if tag is None:
+        return
+    
+    return re.search('[a-zA-Z]+ ?[a-zA-Z]*</span></div>$', tag.group()).group()[:-13]
 
 def isvalid(number: str) -> bool:
     return number.isdecimal()
@@ -67,10 +69,16 @@ def isvalid(number: str) -> bool:
 def get_url(number: str) -> str:
     return r"https://www.acmicpc.net/problem/" + str(int(number))
 
-def embed_404():
+def embed_404(what: str):
     embed=discord.Embed()
-    embed.add_field(name="404", value="Not found", inline=False)
+    embed.add_field(name="404", value=what + " not found", inline=False)
     return embed
+
+def set_embed(title: str, tier: str):
+    tier_color = color[tier.split()[0]]
+    tier_emoji = emoji[tier] + ' '
+
+    return discord.Embed(title=title, description=tier_emoji+tier, color=tier_color)
 
 def get_embed(number: str):
     number = str(int(number))
@@ -83,19 +91,17 @@ def get_embed(number: str):
 
     html_title = bj_soup.title.string
     if is404(html_title):
-        return embed_404()
+        return embed_404('Problem')
     
     title = re.sub('^[0-9]+번: ', '', html_title)
     tier = re.sub('" class=".*$', '', str(ac_soup.img))[10:]
     if number == '9999':
         tier = 'Not ratable'
-    tier_color = color[tier.split()[0]]
     tier_icon = re.sub('^.*src="', '', str(ac_soup.img))[:-3]
-    tier_emoji = emoji[tier] + ' '
 
-    embed = discord.Embed(title=title, description=tier_emoji+tier, color=tier_color)
+    embed = set_embed(title, tier)
+    # embed.set_thumbnail(url=tier_icon)
     embed.set_author(name=number, url=get_url(number))
-    embed.set_thumbnail(url=tier_icon)
 
     # https://mochalatte.dev/posts/today-i-learned/programming/py-crawling-request
 
