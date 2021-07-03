@@ -18,7 +18,7 @@ prefix_file_name = 'prefixes.json'
 help_command = basic_command_prefix + 'help'
 init_command = basic_command_prefix + 'init'
 prefixes = {}
-invite_link = r"https://discord.com/api/oauth2/authorize?client_id=833039423934431243&permissions=18432&scope=bot"
+invite_link = r"https://baekjoonbot.kro.kr"
 
 def get_help_message(message) -> str:
     server_id = str(message.guild.id)
