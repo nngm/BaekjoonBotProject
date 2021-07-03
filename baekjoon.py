@@ -40,7 +40,7 @@ emoji = {"Unrated": "<:unranked:833235211181490186>",
          "Ruby III": "<:ruby3:833235211121852437>",
          "Ruby II": "<:ruby2:833235211021058050>",
          "Ruby I": "<:ruby1:833235210958929940>",
-         "Master": "<:master:857632512334364722>"}
+         "Master": "<:master:860880287172788265>"}
 
 def rom2num(number: str) -> str:
     number = re.sub(' v$', '5', number)
