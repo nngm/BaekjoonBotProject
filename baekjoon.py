@@ -6,7 +6,7 @@ import discord
 
 color = {"Not": 0x2d2d2d, "Unrated": 0x2d2d2d, "Bronze": 0xad5600,
          "Silver": 0x435f7a, "Gold": 0xec9a00, "Platinum": 0x27e2a4,
-         "Diamond": 0x0094fc, "Ruby": 0xff0062}
+         "Diamond": 0x0094fc, "Ruby": 0xff0062, "Master": 0xb300e0}
 
 emoji = {"Unrated": "<:unranked:833235211181490186>", 
          "Not ratable": "<:notratable:833235211121852427>",
@@ -39,7 +39,8 @@ emoji = {"Unrated": "<:unranked:833235211181490186>",
          "Ruby IV": "<:ruby4:833235210858004480>",
          "Ruby III": "<:ruby3:833235211121852437>",
          "Ruby II": "<:ruby2:833235211021058050>",
-         "Ruby I": "<:ruby1:833235210958929940>"}
+         "Ruby I": "<:ruby1:833235210958929940>",
+         "Master": "<:master:857632512334364722>"}
 
 def rom2num(number: str) -> str:
     number = re.sub(' v$', '5', number)
