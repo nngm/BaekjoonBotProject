@@ -11,6 +11,7 @@ import __token__
 import logger
 import baekjoon as bj
 
+admins = {279832973841530880}
 basic_command_prefix = '/'
 bot_name = 'BaekjooneBot'
 bot_initial = 'BB'
@@ -220,10 +221,11 @@ async def on_message(message):
     if message.content == help_command or message.content.startswith(help_command + ' '):
         await message.channel.send(get_help_message(message))
 
-    if message.content == init_command + ' ' + str(message.guild.id):
-        server_id = str(message.guild.id)
-        print('command initialized in', server_id)
-        prefixes[server_id] = '/'
+    if message.content.startswith(init_command) and message.author.id in admins:
+        if len(message.content.split()) > 1:
+            server_id = message.content.split()[1]
+            prefixes[server_id] = '/'
+            print('command initialized in', server_id)
 
     command_prefix = prefixes[str(message.guild.id)] if str(message.guild.id) in prefixes\
                      else basic_command_prefix
