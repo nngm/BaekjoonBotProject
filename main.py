@@ -18,7 +18,7 @@ prefix_file_name = 'prefixes.json'
 help_command = basic_command_prefix + 'help'
 init_command = basic_command_prefix + 'init'
 prefixes = {}
-invite_link = r"https://baekjoonbot.kro.kr"
+invite_link = r"http://baekjoonbot.kro.kr"
 
 def get_help_message(message) -> str:
     server_id = str(message.guild.id)
