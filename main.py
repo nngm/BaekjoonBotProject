@@ -165,6 +165,8 @@ async def user(ctx):    # user profile
         embed = bj.embed_404('User')
     else:
         tier = bj.get_ac_tier(str(ac_soup))
+        if user_name in bj.ac_administrators:
+            tier = 'Administrator'
         if tier is not None:
             embed = bj.set_embed(user_name, tier)
             message += '\n' + ac_url
