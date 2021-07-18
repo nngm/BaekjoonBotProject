@@ -26,9 +26,9 @@ def get_help_message(message) -> str:
 
     # if message.content == help_command
     if server_id in prefixes:
-        descr = f'Prefix for this server is `{prefixes[server_id]}`.'
+        descr = f'The prefix for this server is `{prefixes[server_id]}`.'
     else:
-        descr = f'Prefix for this server is `{basic_command_prefix}`.'
+        descr = f'The prefix for this server is `{basic_command_prefix}`.'
     descr += '\n```'
     descr += '/prefix [new prefix]\n'
     descr += 'e.g. /prefix !\n'
@@ -113,7 +113,7 @@ async def prefix(ctx):  # change prefix
         logger.log(f'author: {ctx.author.id} ({ctx.author.name})')
         logger.log(f'used command: {ctx.message.content}')
     else:
-        await ctx.send(f'Prefix for this server changed to `{new_prefix}`')
+        await ctx.send(f'The prefix for this server changed to `{new_prefix}`')
 
 @bot.command(aliases=['s'])
 async def step(ctx):    # https://www.acmicpc.net/step
