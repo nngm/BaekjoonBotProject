@@ -21,7 +21,7 @@ init_command = basic_command_prefix + 'init'
 prefixes = {}
 invite_link = r"http://baekjoonbot.kro.kr"
 
-def get_help_message(message) -> str:
+def get_help_message(message, by_mention: bool = False) -> str:
     server_id = str(message.guild.id)
 
     # if message.content == help_command
@@ -29,6 +29,10 @@ def get_help_message(message) -> str:
         descr = f'The prefix for this server is `{prefixes[server_id]}`.'
     else:
         descr = f'The prefix for this server is `{basic_command_prefix}`.'
+
+    if by_mention:
+        return descr
+
     descr += '\n```'
     descr += '/prefix [new prefix]\n'
     descr += 'e.g. /prefix !\n'
@@ -50,6 +54,7 @@ def get_help_message(message) -> str:
     descr += '/점투파\n'
     descr += '/코딩도장\n'
     descr += '```'
+
     return descr
 
 bot = commands.Bot(
@@ -221,7 +226,7 @@ async def on_message(message):
         return
 
     if bot.user.mentioned_in(message):
-        await message.channel.send(get_help_message(message))
+        await message.channel.send(get_help_message(message, True))
     
     if message.content == help_command or message.content.startswith(help_command + ' '):
         await message.channel.send(get_help_message(message))
