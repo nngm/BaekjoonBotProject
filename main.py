@@ -241,8 +241,8 @@ async def on_message(message):
         try:
             embed = bj.get_embed(problem_number)
             await message.channel.send(content=url, embed=embed)
-        except Exception  as e:
-            print(e)
+        except Exception as e:
+            print('Could not load problem embed.')
             await message.channel.send(content=url)
 
     await bot.process_commands(message)
