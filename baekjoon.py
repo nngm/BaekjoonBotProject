@@ -104,7 +104,11 @@ def get_embed(number: str):
         tier = 'Not ratable'
     tier_icon = re.sub('^.*src="', '', str(ac_soup.img))[:-3]
 
-    embed = set_embed(title, tier)
+    try:
+        embed = set_embed(title, tier)
+    except:
+        print('Could not load problem tier.')
+        embed = discord.Embed(title=title)
     # embed.set_thumbnail(url=tier_icon)
     embed.set_author(name=number, url=get_url(number))
 
