@@ -172,9 +172,9 @@ async def user(ctx):    # user profile
         tier = bj.get_ac_tier(str(ac_soup))
         if user_name in bj.ac_administrators:
             tier = 'Administrator'
+        message += '\n' + ac_url
         if tier is not None:
             embed = bj.set_embed(user_name, tier)
-            message += '\n' + ac_url
         else:
             embed = discord.Embed(title=user_name)
 
@@ -243,8 +243,12 @@ async def on_message(message):
     if message.content.startswith(command_prefix) and bj.isvalid(message.content[1:]):
         problem_number = message.content[1:]
         url = bj.get_url(problem_number)
-        embed = bj.get_embed(problem_number)
-        await message.channel.send(content=url, embed=embed)
+        try:
+            embed = bj.get_embed(problem_number)
+            await message.channel.send(content=url, embed=embed)
+        except Exception as e:
+            print('Could not load problem embed.')
+            await message.channel.send(content=url)
 
     await bot.process_commands(message)
 
