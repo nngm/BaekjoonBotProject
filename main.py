@@ -240,8 +240,8 @@ async def on_message(message):
     command_prefix = prefixes[str(message.guild.id)] if str(message.guild.id) in prefixes\
                      else basic_command_prefix
 
-    if message.content.startswith(command_prefix) and bj.isvalid(message.content[1:]):
-        problem_number = message.content[1:]
+    if message.content.startswith(command_prefix) and bj.isvalid(message.content[len(command_prefix):]):
+        problem_number = message.content[len(command_prefix):]
         url = bj.get_url(problem_number)
         embed = bj.get_embed(problem_number)
         await message.channel.send(content=url, embed=embed)
