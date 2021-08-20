@@ -225,7 +225,7 @@ async def on_message(message):
     if message.author.bot:
         return
 
-    if bot.user.mentioned_in(message):
+    if bot.user.mentioned_in(message) and len(message.mentions) == 1:
         await message.channel.send(get_help_message(message, True))
     
     if message.content == help_command or message.content.startswith(help_command + ' '):
