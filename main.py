@@ -245,6 +245,7 @@ async def on_message(message):
                 json_file.write(json.dumps(servers))
         except:
             None
+            
 
     if message.author.bot:
         return
