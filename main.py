@@ -16,9 +16,11 @@ basic_command_prefix = '/'
 bot_name = 'BaekjooneBot'
 bot_initial = 'BB'
 prefix_file_name = 'prefixes.json'
+server_file_name = 'servers.json'
 help_command = basic_command_prefix + 'help'
 init_command = basic_command_prefix + 'init'
 prefixes = {}
+servers = {}
 invite_link = r"http://baekjoonbot.kro.kr"
 
 def get_help_message(message, by_mention: bool = False) -> str:
@@ -65,6 +67,7 @@ bot.remove_command('help')
 @bot.event
 async def on_ready():
     global prefixes
+    global servers
 
     # custom activity for bots are not available now
     activity_name = f'{bot_initial} | Use {help_command} ' + \
@@ -82,6 +85,18 @@ async def on_ready():
     
     with open(prefix_file_name, 'r') as json_file:
         prefixes = json.loads(json_file.read())
+
+    try:
+        with open(server_file_name, 'r') as json_file:
+            if json_file.read() == '':
+                raise FileNotFoundError
+    except FileNotFoundError:
+        with open(server_file_name, 'w') as json_file:
+            json_file.write(json.dumps({}))
+        print('Empty "servers.json" file made.')
+    
+    with open(server_file_name, 'r') as json_file:
+        servers = json.loads(json_file.read())
 
     print('Logged in as')
     print(bot.user.name)
@@ -222,6 +237,15 @@ async def invite(ctx):
 
 @bot.event
 async def on_message(message):
+    server = message.guild
+    if server.id not in servers or servers[server.id] != server.name:
+        servers[server.id] = server.name
+        try:
+            with open(server_file_name, 'w') as json_file:
+                json_file.write(json.dumps(servers))
+        except:
+            None
+
     if message.author.bot:
         return
 

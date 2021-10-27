@@ -7,6 +7,9 @@ __token__.py
 # prefix info per servers
 prefixes.json
 
+# list of servers
+servers.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
