@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import discord
 
 ac_administrators = {'solvedac'}
+ac_notratable = {'startlink'}
 
 color = {"Not": 0x2d2d2d, "Unrated": 0x2d2d2d, "Bronze": 0xad5600,
          "Silver": 0x435f7a, "Gold": 0xec9a00, "Platinum": 0x27e2a4,
