@@ -254,7 +254,8 @@ async def on_message(message):
         return
 
     if bot.user.mentioned_in(message) and len(message.mentions) == 1:
-        await message.channel.send(get_help_message(message, True))
+        if message.reference is None or message.reference.cached_message.author != bot.user:
+            await message.channel.send(get_help_message(message, True))
     
     if message.content == help_command or message.content.startswith(help_command + ' '):
         await message.channel.send(get_help_message(message))
