@@ -62,12 +62,12 @@ def is404(title: str) -> bool:
         return False
 
 def get_ac_tier(content: str) -> str:
-    tag = re.search('<div><div>AC RATING</div>.* -->[a-zA-Z]+ ?[a-zA-Z]*</span></div>', content)
+    tag = re.search('AC RATING</div>.*">[a-zA-Z]+ ?[a-zA-Z]*</span>', content)
 
     if tag is None:
         return
     
-    return re.search('[a-zA-Z]+ ?[a-zA-Z]*</span></div>$', tag.group()).group()[:-13]
+    return re.search('[a-zA-Z]+ ?[a-zA-Z]*</span>$', tag.group()).group()[:-7]
 
 def isvalid(number: str) -> bool:
     return number.isdecimal()
