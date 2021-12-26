@@ -245,9 +245,8 @@ async def on_message(message):
             with open(server_file_name, 'w') as json_file:
                 json_file.write(json.dumps(servers))
         except:
-            None
+            pass
             
-
     if message.author.bot:
         return
 
