@@ -184,7 +184,7 @@ async def user(ctx):    # user profile
     if bj.is404(bj_soup.title.string):
         embed = bj.embed_404('User')
     else:
-        tier = bj.get_ac_tier(str(ac_soup))
+        tier = bj.get_ac_tier(user_name)
         if user_name in bj.ac_administrators:
             tier = 'Administrator'
         if user_name in bj.ac_notratable:

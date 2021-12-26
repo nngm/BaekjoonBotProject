@@ -1,4 +1,7 @@
+# https://solvedac.github.io/unofficial-documentation/
+
 import re
+import json
 
 import requests
 from bs4 import BeautifulSoup
@@ -11,6 +14,13 @@ color = {"Not": 0x2d2d2d, "Unrated": 0x2d2d2d, "Bronze": 0xad5600,
          "Silver": 0x435f7a, "Gold": 0xec9a00, "Platinum": 0x27e2a4,
          "Diamond": 0x0094fc, "Ruby": 0xff0062, "Master": 0xb300e0,
          "Administrator": 0x17ce3a}
+
+tier_name = ["Unrated", "Bronze V", "Bronze IV", "Bronze III", "Bronze II", 
+             "Bronze I", "Silver V", "Silver IV", "Silver III", "Silver II", 
+             "Silver I", "Gold V", "Gold IV", "Gold III", "Gold II", "Gold I", 
+             "Platinum V", "Platinum IV", "Platinum III", "Platinum II", "Platinum I", 
+             "Diamond V", "Diamond IV", "Diamond III", "Diamond II", "Diamond I", 
+             "Ruby V", "Ruby IV", "Ruby III", "Ruby II", "Ruby I", "Master"]
 
 emoji = {"Unrated": "<:unranked:833235211181490186>", 
          "Not ratable": "<:notratable:833235211121852427>",
@@ -61,13 +71,17 @@ def is404(title: str) -> bool:
     else:
         return False
 
-def get_ac_tier(content: str) -> str:
-    tag = re.search('AC RATING</div>.*">[a-zA-Z]+ ?[a-zA-Z]*</span>', content)
+def get_ac_tier(user_name: str) -> str:
+    url = r"https://solved.ac/api/v3/user/show?handle=" + user_name
+    response = requests.get(url, headers={'Content-Type': 'application/json'})
 
-    if tag is None:
-        return
-    
-    return re.search('[a-zA-Z]+ ?[a-zA-Z]*</span>$', tag.group()).group()[:-7]
+    if response.status_code == 404:
+        return None
+
+    user = json.loads(response.text)
+    tier = user["tier"]
+
+    return tier_name[tier]
 
 def isvalid(number: str) -> bool:
     return number.isdecimal()
