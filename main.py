@@ -176,8 +176,6 @@ async def user(ctx):    # user profile
 
     bj_page = requests.get(bj_url)
     bj_soup = BeautifulSoup(bj_page.content, 'html.parser')
-    ac_page = requests.get(ac_url)
-    ac_soup = BeautifulSoup(ac_page.content, 'html.parser')
 
     message = bj_url
 
