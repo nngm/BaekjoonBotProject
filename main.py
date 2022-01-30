@@ -235,6 +235,13 @@ async def 코딩도장(ctx):
 @bot.command(aliases=['invite_link'])
 async def invite(ctx):
     await ctx.send(invite_link)
+    
+@bot.command(aliases=['colour'])
+async def color(ctx):
+    color_code = ctx.message.content.split()[1]
+    import re
+    if re.search(r"^[a-fA-F0-9]{6}$", color_code):
+        await ctx.send(embed=discord.Embed(title='#'+color_code.upper(), color=int(color_code, 16)))
 
 @bot.event
 async def on_message(message):
