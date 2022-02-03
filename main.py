@@ -208,7 +208,7 @@ async def c(ctx):   # solved.ac/class
         if num == 0:
             await ctx.send(url)
         elif num <= 10:
-            url += '/' + str(num)
+            url = r"https://solved.ac/search?query=in_class:" + str(num)
             # page = requests.get(url)
             # soup = BeautifulSoup(page.content, 'html.parser')
             # title = soup.title.string
