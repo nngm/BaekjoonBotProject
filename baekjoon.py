@@ -4,7 +4,7 @@ import re
 import json
 
 import requests
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 import discord
 
 ac_administrators = {'solvedac'}
@@ -103,21 +103,21 @@ def set_embed(title: str, tier: str):
 def get_embed(number: str):
     number = str(int(number))
     url = get_url(number)
+    api_url = r"https://solved.ac/api/v3/problem/show?problemId=" + number
+    response = requests.get(api_url, headers={'Content-Type': 'application/json'})
     
-    bj_page = requests.get(url)
-    bj_soup = BeautifulSoup(bj_page.content, 'html.parser')
-    ac_page = requests.get(r"https://solved.ac/search?query=" + number)
-    ac_soup = BeautifulSoup(ac_page.content, 'html.parser')
+    # bj_page = requests.get(url)
+    # bj_soup = BeautifulSoup(bj_page.content, 'html.parser')
+    # ac_page = requests.get(r"https://solved.ac/search?query=" + number)
+    # ac_soup = BeautifulSoup(ac_page.content, 'html.parser')
 
-    html_title = bj_soup.title.string
-    if is404(html_title):
+    if response.status_code == 404:
         return embed_404('Problem')
-    
-    title = re.sub('^[0-9]+번: ', '', html_title)
-    tier = re.sub('" class=".*$', '', str(ac_soup.img))[10:]
-    if number == '9999':
-        tier = 'Not ratable'
-    tier_icon = re.sub('^.*src="', '', str(ac_soup.img))[:-3]
+
+    problem = json.loads(response.text)
+    title = problem["titleKo"]
+    tier = tier_name[problem["level"]]
+    # tier_icon = re.sub('^.*src="', '', str(ac_soup.img))[:-3]
 
     try:
         embed = set_embed(title, tier)
