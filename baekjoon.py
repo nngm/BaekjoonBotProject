@@ -2,6 +2,7 @@
 
 import re
 import json
+from tkinter.messagebox import NO
 
 import requests
 # from bs4 import BeautifulSoup
@@ -70,6 +71,15 @@ def is404(title: str) -> bool:
         return True
     else:
         return False
+
+def get_user_name(user_name: str) -> str:
+    url = r"https://solved.ac/api/v3/user/show?handle=" + user_name
+    response = requests.get(url, headers={'Content-Type': 'application/json'})
+
+    if response.status_code == 404:
+        return None
+    
+    return json.loads(response.text)["handle"]
 
 def get_ac_tier(user_name: str) -> str:
     url = r"https://solved.ac/api/v3/user/show?handle=" + user_name
