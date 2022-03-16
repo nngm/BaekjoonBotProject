@@ -1,6 +1,6 @@
 # https://solvedac.github.io/unofficial-documentation/
 
-import re
+# import re
 import json
 
 import requests
@@ -57,19 +57,19 @@ emoji = {"Unrated": "<:unranked:833235211181490186>",
          "Master": "<:master:860880287172788265>",
          "Administrator": "<:admin:863338449935138847>"}
 
-def rom2num(number: str) -> str:
-    number = re.sub(' v$', '5', number)
-    number = re.sub(' iv$', '4', number)
-    number = re.sub(' iii$', '3', number)
-    number = re.sub(' ii$', '2', number)
-    number = re.sub(' i$', '1', number)
-    return number
+# def rom2num(number: str) -> str:
+#     number = re.sub(' v$', '5', number)
+#     number = re.sub(' iv$', '4', number)
+#     number = re.sub(' iii$', '3', number)
+#     number = re.sub(' ii$', '2', number)
+#     number = re.sub(' i$', '1', number)
+#     return number
 
-def is404(title: str) -> bool:
-    if title == "Baekjoon Online Judge":
-        return True
-    else:
-        return False
+# def is404(title: str) -> bool:
+#     if title == "Baekjoon Online Judge":
+#         return True
+#     else:
+#         return False
 
 def get_user_name(user_name: str) -> str:
     url = r"https://solved.ac/api/v3/user/show?handle=" + user_name

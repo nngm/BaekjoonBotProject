@@ -164,35 +164,41 @@ async def step(ctx):    # https://www.acmicpc.net/step
 async def user(ctx):    # user profile
     bj_url = r"https://www.acmicpc.net/user/"
     ac_url = r"https://solved.ac/profile/"
-    message = bj_url + ctx.message.content.split()[1]
 
     try:
         user_name = bj.get_user_name(ctx.message.content.split()[1])
+        if user_name is None:
+            user_name = ctx.message.content.split()[1]
     except:
         await ctx.send(f'Type `{help_command} user` for usage.')
         return
+
+    # message = bj_url + user_name
+
+    # bj_page = requests.get(bj_url)
+    # bj_soup = BeautifulSoup(bj_page.content, 'html.parser')
     
-    if user_name is None:
-        embed = bj.embed_404('User')
-    else:
-        bj_url += user_name
-        ac_url += user_name
-        message = bj_url
+    # if bj.is404(bj_soup.title.string):
+    #     embed = bj.embed_404('User')
+    # else:
+    bj_url += user_name
+    ac_url += user_name
+    message = bj_url
+    
+    tier = bj.get_ac_tier(user_name)
+
+    if user_name in bj.ac_administrators:
+        tier = 'Administrator'
+    if user_name in bj.ac_notratable:
+        tier = 'Not ratable'
         
-        tier = bj.get_ac_tier(user_name)
+    if tier is not None:
+        embed = bj.set_embed(user_name, tier)
+        message += '\n' + ac_url
+    else:
+        embed = discord.Embed(title=user_name)
 
-        if user_name in bj.ac_administrators:
-            tier = 'Administrator'
-        if user_name in bj.ac_notratable:
-            tier = 'Not ratable'
-            
-        if tier is not None:
-            embed = bj.set_embed(user_name, tier)
-            message += '\n' + ac_url
-        else:
-            embed = discord.Embed(title=user_name)
-
-        embed.set_author(name='User', url=bj_url)
+    embed.set_author(name='User', url=bj_url)
 
     await ctx.send(content=message, embed=embed)
 
