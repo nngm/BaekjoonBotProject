@@ -249,6 +249,7 @@ async def color(ctx):
 
 @bot.event
 async def on_message(message):
+    global servers
     server = message.guild
     if server.id not in servers or servers[server.id] != server.name:
         servers[server.id] = server.name
