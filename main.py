@@ -133,7 +133,7 @@ async def prefix(ctx):  # change prefix
         logger.log(f'author: {ctx.author.id} ({ctx.author.name})')
         logger.log(f'used command: {ctx.message.content}')
     else:
-        await ctx.send(f'The prefix for this server changed to `{new_prefix}`')
+        await ctx.send(f'The prefix for this server has changed to `{new_prefix}`.')
 
 @bot.command(aliases=['s'])
 async def step(ctx):    # https://www.acmicpc.net/step
