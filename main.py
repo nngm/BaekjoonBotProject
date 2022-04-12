@@ -51,6 +51,7 @@ def get_help_message(message, by_mention: bool = False) -> str:
     descr += f'\n/{ansi_blue}random {ansi_green}[tier]{ansi_init}\n'
     descr += f'e.g. /random gold\n'
     descr += f'e.g. /random s5..g1\n'
+    descr += f'e.g. /random all\n'
 
     descr += f'\n/{ansi_blue}prefix {ansi_green}[new prefix]{ansi_init}\n'
     descr += f'e.g. /prefix !\n'
@@ -267,6 +268,9 @@ async def random(ctx):
 
         tier_range = tier_from + '..' + tier_to
     else:
+        if tier_range == 'all':
+            tier_range = 'b5..r1'
+
         if tier_range in voted_tiers:
             tier_range = tier_range[0] + '5..' + tier_range[0] + '1'
 
@@ -305,7 +309,7 @@ async def 코딩도장(ctx):
 @bot.command(aliases=['invite_link'])
 async def invite(ctx):
     await ctx.send(invite_link)
-    
+
 @bot.command(aliases=['colour'])
 async def color(ctx):
     color_code = ctx.message.content.split()[1]
@@ -324,7 +328,7 @@ async def on_message(message):
                 json_file.write(json.dumps(servers))
         except:
             pass
-            
+
     if message.author.bot:
         return
 
@@ -332,7 +336,7 @@ async def on_message(message):
         if message.reference is None or message.reference.cached_message is None or\
            message.reference.cached_message.author != bot.user:
             await message.channel.send(get_help_message(message, True))
-    
+
     if message.content == help_command or message.content.startswith(help_command + ' '):
         await message.channel.send(get_help_message(message))
 
