@@ -39,6 +39,7 @@ def get_help_message(message, by_mention: bool = False) -> str:
     ansi_init = '\u001b[0m'
     ansi_blue = '\u001b[34m'
     ansi_green = '\u001b[32m'
+    ansi_gray = '\u001b[30m'
 
     descr += f'\n```ansi'
 
@@ -48,10 +49,10 @@ def get_help_message(message, by_mention: bool = False) -> str:
     descr += f'\n/{ansi_blue}user {ansi_green}[user name]{ansi_init}\n'
     descr += f'e.g. /user solvedac\n'
 
-    descr += f'\n/{ansi_blue}random {ansi_green}[tier]{ansi_init}\n'
+    descr += f'\n/{ansi_blue}random {ansi_green}(tier){ansi_init}\n'
+    descr += f'e.g. /random {ansi_gray}(which is the same as /random all){ansi_init}\n'
     descr += f'e.g. /random gold\n'
     descr += f'e.g. /random s5..g1\n'
-    descr += f'e.g. /random all\n'
 
     descr += f'\n/{ansi_blue}prefix {ansi_green}[new prefix]{ansi_init}\n'
     descr += f'e.g. /prefix !\n'
@@ -243,8 +244,7 @@ async def random(ctx):
     try:
         tier_range = ctx.message.content.split()[1].lower()
     except:
-        await ctx.send(f'Type `{help_command} random` for usage.')
-        return
+        tier_range = 'all'
 
     voted_tiers = ['bronze', 'silver', 'gold', 'platinum', 'diamond', 'ruby'] + list('bsgpdr')
     
