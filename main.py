@@ -220,6 +220,23 @@ async def c(ctx):   # solved.ac/class
             embed.set_author(name='CLASS ' + str(num), url=url)
             await ctx.send(content=url, embed=embed)
 
+@bot.command(aliases=['rd', 'rand', 'randomdefense', 'randomdefence'])
+async def random(ctx):
+    try:
+        tier_range = ctx.message.content.split()[1]
+    except:
+        await ctx.send(f'Type `{help_command} user` for usage.')
+        return
+
+    problem_number = bj.search_tier(tier_range)
+
+    if problem_number is None:
+        await ctx.send(content="Couldn't find any problems.")
+
+    url = bj.get_url(problem_number)
+    embed = bj.get_embed(problem_number)
+    await ctx.send(content=url, embed=embed)
+
 @bot.command(aliases=['repl'])
 async def replit(ctx):
     await ctx.send(r"https://repl.it/")
