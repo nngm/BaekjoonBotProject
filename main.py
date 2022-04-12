@@ -269,7 +269,7 @@ async def random(ctx):
         tier_range = tier_from + '..' + tier_to
     else:
         if tier_range == 'all':
-            tier_range = 'b5..r1'
+            tier_range = 'u..r1'
 
         if tier_range in voted_tiers:
             tier_range = tier_range[0] + '5..' + tier_range[0] + '1'
@@ -277,7 +277,10 @@ async def random(ctx):
         if tier_range[:-1] in voted_tiers and tier_range[-1] in '12345':
             tier_range = tier_range[0] + tier_range[-1]
 
-    if re.match('(b|s|g|p|d|r)(1|2|3|4|5)(\.\.(b|s|g|p|d|r)(1|2|3|4|5))?$', tier_range) is None:
+        if tier_range.isdecimal() and 1 <= int(tier_range) <= 30:
+            tier_range = 'bsgpdr'[~-int(tier_range) // 5] + '54321'[~-int(tier_range) % 5]
+
+    if re.match('(u|unrated|0|(b|s|g|p|d|r)(1|2|3|4|5))(\.\.(b|s|g|p|d|r)(1|2|3|4|5))?$', tier_range) is None:
         await ctx.send('Argument is not valid.')
         return
 
