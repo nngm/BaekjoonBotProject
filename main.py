@@ -36,37 +36,43 @@ def get_help_message(message, by_mention: bool = False) -> str:
     if by_mention:
         return descr
 
-    descr += '\n```'
-    descr += '\n/step (step number)\n'
-    descr += 'e.g. /step\n'
-    descr += 'e.g. /step 1\n'
-    
-    descr += '\n/user [user name]\n'
-    descr += 'e.g. /user solvedac\n'
+    ansi_init = '\u001b[0m'
+    ansi_blue = '\u001b[34m'
+    ansi_green = '\u001b[32m'
 
-    descr += '\n/random [tier]\n'
-    descr += 'e.g. /random gold\n'
-    descr += 'e.g. /random s5..g1\n'
+    descr += f'\n```ansi'
 
-    descr += '/prefix [new prefix]\n'
-    descr += 'e.g. /prefix !\n'
+    descr += f'\n/{ansi_green}[problem number]{ansi_init}\n'
+    descr += f'e.g. /1000\n'
     
-    descr += '\n/invite\n'
-    descr += 'for the invite link\n'
+    descr += f'\n/{ansi_blue}user {ansi_green}[user name]{ansi_init}\n'
+    descr += f'e.g. /user solvedac\n'
+
+    descr += f'\n/{ansi_blue}random {ansi_green}[tier]{ansi_init}\n'
+    descr += f'e.g. /random gold\n'
+    descr += f'e.g. /random s5..g1\n'
+
+    descr += f'\n/{ansi_blue}prefix {ansi_green}[new prefix]{ansi_init}\n'
+    descr += f'e.g. /prefix !\n'
     
-    descr += '\n/[problem number]\n'
-    descr += 'e.g. /1000\n'
+    descr += f'\n/{ansi_blue}invite{ansi_init}\n'
+    descr += f'for the invite link\n'
     
-    descr += '\n/class (class number)\n'
-    descr += 'e.g. /class\n'
-    descr += 'e.g. /class 1\n'
+    descr += f'\n/{ansi_blue}step {ansi_green}(step number){ansi_init}\n'
+    descr += f'e.g. /step\n'
+    descr += f'e.g. /step 1\n'
     
-    descr += '\n*** 사이트 바로가기 ***\n'
-    descr += '/replit\n'
-    descr += '/ries\n'
-    descr += '/점투파\n'
-    descr += '/코딩도장\n'
-    descr += '```'
+    descr += f'\n/{ansi_blue}class {ansi_green}(class number){ansi_init}\n'
+    descr += f'e.g. /class\n'
+    descr += f'e.g. /class 1\n'
+    
+    descr += f'\n*** 사이트 바로가기 ***\n'
+    descr += f'/{ansi_blue}replit{ansi_init}\n'
+    descr += f'/{ansi_blue}ries{ansi_init}\n'
+    descr += f'/{ansi_blue}점투파{ansi_init}\n'
+    descr += f'/{ansi_blue}코딩도장{ansi_init}\n'
+
+    descr += f'```'
 
     return descr
 
