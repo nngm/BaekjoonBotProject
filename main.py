@@ -1,4 +1,5 @@
 import asyncio
+import re
 import json
 import datetime
 
@@ -36,20 +37,30 @@ def get_help_message(message, by_mention: bool = False) -> str:
         return descr
 
     descr += '\n```'
-    descr += '/prefix [new prefix]\n'
-    descr += 'e.g. /prefix !\n'
-    descr += '\n/invite\n'
-    descr += 'for the invite link\n'
-    descr += '\n/[problem number]\n'
-    descr += 'e.g. /1000\n'
     descr += '\n/step (step number)\n'
     descr += 'e.g. /step\n'
     descr += 'e.g. /step 1\n'
+    
     descr += '\n/user [user name]\n'
     descr += 'e.g. /user solvedac\n'
+
+    descr += '\n/random [tier]\n'
+    descr += 'e.g. /random gold\n'
+    descr += 'e.g. /random s5..g1\n'
+
+    descr += '/prefix [new prefix]\n'
+    descr += 'e.g. /prefix !\n'
+    
+    descr += '\n/invite\n'
+    descr += 'for the invite link\n'
+    
+    descr += '\n/[problem number]\n'
+    descr += 'e.g. /1000\n'
+    
     descr += '\n/class (class number)\n'
     descr += 'e.g. /class\n'
     descr += 'e.g. /class 1\n'
+    
     descr += '\n*** 사이트 바로가기 ***\n'
     descr += '/replit\n'
     descr += '/ries\n'
@@ -223,9 +234,41 @@ async def c(ctx):   # solved.ac/class
 @bot.command(aliases=['rd', 'rand', 'randomdefense', 'randomdefence'])
 async def random(ctx):
     try:
-        tier_range = ctx.message.content.split()[1]
+        tier_range = ctx.message.content.split()[1].lower()
     except:
-        await ctx.send(f'Type `{help_command} user` for usage.')
+        await ctx.send(f'Type `{help_command} random` for usage.')
+        return
+
+    voted_tiers = ['bronze', 'silver', 'gold', 'platinum', 'diamond', 'ruby'] + list('bsgpdr')
+    
+    if re.match('.+\.\..+', tier_range):
+        tier_from, tier_to = tier_range.split('..')
+
+        if tier_from[:-1] in voted_tiers and tier_from[-1] in '12345':
+            tier_from = tier_from[0] + tier_from[-1]
+        if tier_to[:-1] in voted_tiers and tier_to[-1] in '12345':
+            tier_to = tier_to[0] + tier_to[-1]
+
+        if tier_from in voted_tiers:
+            tier_from = tier_from[0] + '5'
+        if tier_to in voted_tiers:
+            tier_to = tier_to[0] + '1'
+
+        if tier_from.isdecimal() and 1 <= int(tier_from) <= 30:
+            tier_from = 'bsgpdr'[~-int(tier_from) // 5] + '54321'[~-int(tier_from) % 5]
+        if tier_to.isdecimal() and 1 <= int(tier_to) <= 30:
+            tier_to = 'bsgpdr'[~-int(tier_to) // 5] + '54321'[~-int(tier_to) % 5]
+
+        tier_range = tier_from + '..' + tier_to
+    else:
+        if tier_range in voted_tiers:
+            tier_range = tier_range[0] + '5..' + tier_range[0] + '1'
+
+        if tier_range[:-1] in voted_tiers and tier_range[-1] in '12345':
+            tier_range = tier_range[0] + tier_range[-1]
+
+    if re.match('(b|s|g|p|d|r)(1|2|3|4|5)(\.\.(b|s|g|p|d|r)(1|2|3|4|5))?$', tier_range) is None:
+        await ctx.send('Argument is not valid.')
         return
 
     problem_number = bj.search_tier(tier_range)
