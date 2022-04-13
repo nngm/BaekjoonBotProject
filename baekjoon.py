@@ -156,7 +156,7 @@ def get_embed(number: str):
     return embed
 
 def search_tier(tier_range: str) -> str:
-    api_url = r"https://solved.ac/api/v3/search/problem?sort=random&query=tier:" + tier_range
+    api_url = r"https://solved.ac/api/v3/search/problem?sort=random&query=solvable:true tier:" + tier_range
     response = requests.get(api_url, headers={'Content-Type': 'application/json'})
 
     if response.status_code == 404:
