@@ -276,7 +276,7 @@ async def random(ctx):
 
         tier_range = tier_from + '..' + tier_to
     else:
-        if tier_range == 'all':
+        if tier_range == 'all' or tier_range == 'a':
             tier_range = 'u..r1'
 
         if tier_range in voted_tiers:
