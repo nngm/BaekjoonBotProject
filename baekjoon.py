@@ -77,7 +77,7 @@ def get_user_name(user_name: str) -> str:
 
     if response.status_code == 404:
         return None
-    
+
     return json.loads(response.text)["handle"]
 
 def get_ac_tier(user_name: str) -> str:
@@ -155,12 +155,16 @@ def get_embed(number: str):
     # embed.add_field(name="정답 비율", value="50.103%", inline=True)
     return embed
 
-def search_tier(tier_range: str) -> str:
-    api_url = r"https://solved.ac/api/v3/search/problem?sort=random&query=solvable:true tier:" + tier_range
-    response = requests.get(api_url, headers={'Content-Type': 'application/json'})
+def search_tier(tier_range: str, arg: str) -> str:
+    api_url = r"https://solved.ac/api/v3/search/problem?sort=random&query=solvable:true tier:"
+    response = requests.get(api_url + tier_range + ' ' + arg, headers={'Content-Type': 'application/json'})
 
     if response.status_code == 404:
         return None
-    
-    problem = json.loads(response.text)["items"][0]
+
+    try:
+        problem = json.loads(response.text)["items"][0]
+    except:
+        return None
+
     return problem["problemId"]

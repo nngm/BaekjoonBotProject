@@ -1,3 +1,4 @@
+from ast import alias
 import asyncio
 import re
 import json
@@ -51,7 +52,7 @@ def get_help_message(message, by_mention: bool = False) -> str:
 
     descr += f'\n/{ansi_blue}random {ansi_green}(tier){ansi_init}\n'
     descr += f'e.g. /random {ansi_gray}(which is the same as /random all){ansi_init}\n'
-    descr += f'e.g. /random gold\n'
+    descr += f'e.g. /random gold lang:ko\n'
     descr += f'e.g. /random s5..g1\n'
 
     descr += f'\n/{ansi_blue}prefix {ansi_green}[new prefix]{ansi_init}\n'
@@ -67,6 +68,9 @@ def get_help_message(message, by_mention: bool = False) -> str:
     descr += f'\n/{ansi_blue}class {ansi_green}(class number){ansi_init}\n'
     descr += f'e.g. /class\n'
     descr += f'e.g. /class 1\n'
+
+    descr += f'\n/{ansi_blue}lang{ansi_init}\n'
+    descr += f'bg cs en fr hr ja ko mn no pl pt ru sv th vi\n'
     
     descr += f'\n*** 사이트 바로가기 ***\n'
     descr += f'/{ansi_blue}replit{ansi_init}\n'
@@ -241,13 +245,17 @@ async def c(ctx):   # solved.ac/class
 
 @bot.command(aliases=['rd', 'rand', 'randomdefense', 'randomdefence'])
 async def random(ctx):
+    voted_tiers = ['bronze', 'silver', 'gold', 'platinum', 'diamond', 'ruby'] + list('bsgpdr')
+    
     try:
         tier_range = ctx.message.content.split()[1].lower()
     except:
         tier_range = 'all'
+    try:
+        arg = ' '.join(ctx.message.content.split()[2:])
+    except:
+        arg = ''
 
-    voted_tiers = ['bronze', 'silver', 'gold', 'platinum', 'diamond', 'ruby'] + list('bsgpdr')
-    
     if re.match('.+\.\..+', tier_range):
         tier_from, tier_to = tier_range.split('..')
 
@@ -284,14 +292,19 @@ async def random(ctx):
         await ctx.send('Argument is not valid.')
         return
 
-    problem_number = bj.search_tier(tier_range)
+    problem_number = bj.search_tier(tier_range, arg)
 
     if problem_number is None:
-        await ctx.send(content="Couldn't find any problems.")
+        await ctx.send(content="No problem found")
+        return
 
     url = bj.get_url(problem_number)
     embed = bj.get_embed(problem_number)
     await ctx.send(content=url, embed=embed)
+
+@bot.command(aliases=['language', 'languages'])
+async def lang(ctx):
+    await ctx.send("Languages possible in solved.ac: bg cs en fr hr ja ko mn no pl pt ru sv th vi")
 
 @bot.command(aliases=['repl'])
 async def replit(ctx):
