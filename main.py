@@ -159,13 +159,13 @@ async def prefix(ctx):  # change prefix
 
 @bot.command(aliases=['s'])
 async def step(ctx):    # https://www.acmicpc.net/step
-    dic = [ 1,  4,  3,  6,  5,  7,  8, 10, 19, 22,
+    dic = [ 0, 1, 4, 3, 6,  5,  7,  8, 10, 19, 22,
             9, 49, 50, 18, 34, 16, 48, 33, 11, 12,
            20, 29, 13, 17, 24, 26, 59, 41, 23, 14,
            15, 21, 45, 31, 27, 25, 40, 43, 35, 39,
            47, 37, 38, 36, 42, 44, 60, 28, 30, 58,
            32, 46]
-    titles = ["입출력과 사칙연산", "조건문", "반복문", "1차원 배열", "함수", "문자열", "기본 수학 1", "기본 수학 2",
+    titles = ["", "입출력과 사칙연산", "조건문", "반복문", "1차원 배열", "함수", "문자열", "기본 수학 1", "기본 수학 2",
               "재귀", "브루트 포스", "정렬", "집합과 맵", "기하 1", "정수론 및 조합론", "백트래킹", "동적 계획법 1",
               "누적 합", "그리디 알고리즘", "스택", "큐, 덱", "분할 정복", "이분 탐색", "우선순위 큐", "동적 계획법 2",
               "그래프와 순회", "최단 경로", "투 포인터", "동적 계획법과 최단거리 역추적", "트리", "유니온 파인드",
@@ -186,7 +186,7 @@ async def step(ctx):    # https://www.acmicpc.net/step
             await ctx.send(content=url, embed=embed)
         elif num <= 50:
             url += '/' + str(dic[num])
-            title = titles[dic[num]]
+            title = titles[num]
             embed = discord.Embed()
             embed.set_author(name=f'{num}. ' + title, url=url)
             await ctx.send(content=url, embed=embed)
