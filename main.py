@@ -184,7 +184,7 @@ async def step(ctx):    # https://www.acmicpc.net/step
             embed = discord.Embed()
             embed.set_author(name="단계별로 풀어보기", url=url)
             await ctx.send(content=url, embed=embed)
-        elif num <= 50:
+        elif num < len(dic):
             url += '/' + str(dic[num])
             title = titles[num]
             embed = discord.Embed()
