@@ -1,11 +1,10 @@
-from ast import alias
 import asyncio
 import re
 import json
 import datetime
 
-import requests
-from bs4 import BeautifulSoup
+# import requests
+# from bs4 import BeautifulSoup
 import discord
 from discord.ext import commands
 
@@ -160,9 +159,20 @@ async def prefix(ctx):  # change prefix
 
 @bot.command(aliases=['s'])
 async def step(ctx):    # https://www.acmicpc.net/step
-    dic = [0, 1, 4, 3, 2, 6, 5, 7, 8, 10, 19, 22, 9, 49, 34, 16, 33, 18, 11, 12, 20,
-           29, 13, 17, 24, 26, 59, 41, 23, 14, 15, 21, 45, 31, 27, 25, 40, 43, 35, 39, 47,
-           37, 38, 36, 42, 44, 60, 28, 30, 32, 46]
+    dic = [ 1,  4,  3,  6,  5,  7,  8, 10, 19, 22,
+            9, 49, 50, 18, 34, 16, 48, 33, 11, 12,
+           20, 29, 13, 17, 24, 26, 59, 41, 23, 14,
+           15, 21, 45, 31, 27, 25, 40, 43, 35, 39,
+           47, 37, 38, 36, 42, 44, 60, 28, 30, 58,
+           32, 46]
+    titles = ["입출력과 사칙연산", "조건문", "반복문", "1차원 배열", "함수", "문자열", "기본 수학 1", "기본 수학 2",
+              "재귀", "브루트 포스", "정렬", "집합과 맵", "기하 1", "정수론 및 조합론", "백트래킹", "동적 계획법 1",
+              "누적 합", "그리디 알고리즘", "스택", "큐, 덱", "분할 정복", "이분 탐색", "우선순위 큐", "동적 계획법 2",
+              "그래프와 순회", "최단 경로", "투 포인터", "동적 계획법과 최단거리 역추적", "트리", "유니온 파인드",
+              "최소 신장 트리", "트리에서의 동적 계획법", "기하 2", "동적 계획법 3", "문자열 알고리즘 1", "위상 정렬",
+              "최소 공통 조상", "강한 연결 요소", "세그먼트 트리", "스위핑", "동적 계획법 4", "컨벡스 헐", "이분 매칭",
+              "네트워크 플로우", "MCMF", "더 어려운 수학", "고속 푸리에 변환", "문자열 알고리즘 2", "어려운 구간 쿼리",
+              "세그먼트 트리 (Hard)", "동적 계획법 최적화", "매우 어려운 자료구조와 알고리즘 (수정 예정)"]
     url = r"https://www.acmicpc.net/step"
     if len(ctx.message.content.split()) == 1:
         embed = discord.Embed()
@@ -176,9 +186,7 @@ async def step(ctx):    # https://www.acmicpc.net/step
             await ctx.send(content=url, embed=embed)
         elif num <= 50:
             url += '/' + str(dic[num])
-            page = requests.get(url)
-            soup = BeautifulSoup(page.content, 'html.parser')
-            title = soup.title.string
+            title = titles[dic[num]]
             embed = discord.Embed()
             embed.set_author(name=f'{num}. ' + title, url=url)
             await ctx.send(content=url, embed=embed)
