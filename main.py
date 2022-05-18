@@ -29,9 +29,9 @@ def get_help_message(message, by_mention: bool = False) -> str:
 
     # if message.content == help_command
     if server_id in prefixes:
-        descr = f'The prefix for this server is `{prefixes[server_id]}`.'
+        descr = f'The prefix for this server is `{prefixes[server_id]}`.\n'
     else:
-        descr = f'The prefix for this server is `{basic_command_prefix}`.'
+        descr = f'The prefix for this server is `{basic_command_prefix}`.\n'
 
     if by_mention:
         return descr
@@ -41,7 +41,18 @@ def get_help_message(message, by_mention: bool = False) -> str:
     ansi_green = '\u001b[32m'
     ansi_gray = '\u001b[30m'
 
-    descr += f'\n```ansi'
+    try: 
+        if message.content.split()[1] == 'mobile':
+            ansi_init = ''
+            ansi_blue = ''
+            ansi_green = ''
+            ansi_gray = ''
+    except:
+        pass
+
+    descr += f'Enter `/help mobile` if you are on mobile.\n'
+
+    descr += f'```ansi'
 
     descr += f'\n/{ansi_green}[problem number]{ansi_init}\n'
     descr += f'e.g. /1000\n'
@@ -312,7 +323,7 @@ async def random(ctx):
 
 @bot.command(aliases=['language', 'languages'])
 async def lang(ctx):
-    await ctx.send("Languages possible in solved.ac: bg cs en fr hr ja ko mn no pl pt ru sv th vi")
+    await ctx.send("Languages available in solved.ac: bg cs en fr hr ja ko mn no pl pt ru sv th vi")
 
 @bot.command(aliases=['repl'])
 async def replit(ctx):
