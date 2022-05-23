@@ -54,28 +54,28 @@ def get_help_message(message, by_mention: bool = False) -> str:
 
     descr += f'```ansi'
 
-    descr += f'\n/{ansi_green}[problem number]{ansi_init}\n'
+    descr += f'\n/{ansi_green}<problem number>{ansi_init}\n'
     descr += f'e.g. /1000\n'
     
-    descr += f'\n/{ansi_blue}user {ansi_green}[user name]{ansi_init}\n'
+    descr += f'\n/{ansi_blue}user {ansi_green}<user name>{ansi_init}\n'
     descr += f'e.g. /user solvedac\n'
 
-    descr += f'\n/{ansi_blue}random {ansi_green}(tier){ansi_init}\n'
+    descr += f'\n/{ansi_blue}random {ansi_green}[tier]{ansi_init}\n'
     descr += f'e.g. /random {ansi_gray}(which is the same as /random all){ansi_init}\n'
     descr += f'e.g. /random gold lang:ko\n'
     descr += f'e.g. /random s5..g1\n'
 
-    descr += f'\n/{ansi_blue}prefix {ansi_green}[new prefix]{ansi_init}\n'
+    descr += f'\n/{ansi_blue}prefix {ansi_green}<new prefix>{ansi_init}\n'
     descr += f'e.g. /prefix !\n'
     
     descr += f'\n/{ansi_blue}invite{ansi_init}\n'
     descr += f'for the invite link\n'
     
-    descr += f'\n/{ansi_blue}step {ansi_green}(step number){ansi_init}\n'
+    descr += f'\n/{ansi_blue}step {ansi_green}[step number]{ansi_init}\n'
     descr += f'e.g. /step\n'
     descr += f'e.g. /step 1\n'
     
-    descr += f'\n/{ansi_blue}class {ansi_green}(class number){ansi_init}\n'
+    descr += f'\n/{ansi_blue}class {ansi_green}[class number]{ansi_init}\n'
     descr += f'e.g. /class\n'
     descr += f'e.g. /class 1\n'
 
