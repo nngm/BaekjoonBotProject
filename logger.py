@@ -1,5 +1,6 @@
 import datetime
 
+
 def log(msg: str) -> None:
     today = datetime.datetime.today()
     date = today.strftime('%Y-%m-%d')

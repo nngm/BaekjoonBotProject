@@ -15,14 +15,14 @@ color = {"Not": 0x2d2d2d, "Unrated": 0x2d2d2d, "Bronze": 0xad5600,
          "Diamond": 0x0094fc, "Ruby": 0xff0062, "Master": 0xb300e0,
          "Administrator": 0x17ce3a}
 
-tier_name = ["Unrated", "Bronze V", "Bronze IV", "Bronze III", "Bronze II", 
-             "Bronze I", "Silver V", "Silver IV", "Silver III", "Silver II", 
-             "Silver I", "Gold V", "Gold IV", "Gold III", "Gold II", "Gold I", 
-             "Platinum V", "Platinum IV", "Platinum III", "Platinum II", "Platinum I", 
-             "Diamond V", "Diamond IV", "Diamond III", "Diamond II", "Diamond I", 
+tier_name = ["Unrated", "Bronze V", "Bronze IV", "Bronze III", "Bronze II",
+             "Bronze I", "Silver V", "Silver IV", "Silver III", "Silver II",
+             "Silver I", "Gold V", "Gold IV", "Gold III", "Gold II", "Gold I",
+             "Platinum V", "Platinum IV", "Platinum III", "Platinum II", "Platinum I",
+             "Diamond V", "Diamond IV", "Diamond III", "Diamond II", "Diamond I",
              "Ruby V", "Ruby IV", "Ruby III", "Ruby II", "Ruby I", "Master"]
 
-emoji = {"Unrated": "<:unranked:833235211181490186>", 
+emoji = {"Unrated": "<:unranked:833235211181490186>",
          "Not ratable": "<:notratable:833235211121852427>",
          "Bronze V": "<:bronze5:833235210476191764>",
          "Bronze IV": "<:bronze4:833235210380247050>",
@@ -71,6 +71,7 @@ emoji = {"Unrated": "<:unranked:833235211181490186>",
 #     else:
 #         return False
 
+
 def get_user_name(user_name: str) -> str:
     url = r"https://solved.ac/api/v3/user/show?handle=" + user_name
     response = requests.get(url, headers={'Content-Type': 'application/json'})
@@ -79,6 +80,7 @@ def get_user_name(user_name: str) -> str:
         return None
 
     return json.loads(response.text)["handle"]
+
 
 def get_ac_tier(user_name: str) -> str:
     url = r"https://solved.ac/api/v3/user/show?handle=" + user_name
@@ -92,16 +94,20 @@ def get_ac_tier(user_name: str) -> str:
 
     return tier_name[tier]
 
+
 def isvalid(number: str) -> bool:
     return number.isdecimal()
+
 
 def get_url(number: str) -> str:
     return r"https://www.acmicpc.net/problem/" + str(int(number))
 
+
 def embed_404(what: str):
-    embed=discord.Embed()
+    embed = discord.Embed()
     embed.add_field(name="404", value=what + " not found", inline=False)
     return embed
+
 
 def set_embed(title: str, tier: str):
     tier_color = color[tier.split()[0]]
@@ -109,12 +115,14 @@ def set_embed(title: str, tier: str):
 
     return discord.Embed(title=title, description=tier_emoji+tier, color=tier_color)
 
+
 def get_embed(number: str):
     number = str(int(number))
     url = get_url(number)
     api_url = r"https://solved.ac/api/v3/problem/show?problemId=" + number
-    response = requests.get(api_url, headers={'Content-Type': 'application/json'})
-    
+    response = requests.get(
+        api_url, headers={'Content-Type': 'application/json'})
+
     # bj_page = requests.get(url)
     # bj_soup = BeautifulSoup(bj_page.content, 'html.parser')
     # ac_page = requests.get(r"https://solved.ac/search?query=" + number)
@@ -142,22 +150,24 @@ def get_embed(number: str):
     # if re.search('<section id="problem_tags">', str(row_tag)):
     #     text = '분류: '
     #     pattern = '<a href="/problem/tag/[0-9]+" class="spoiler-link">.+</a>'
-        
+
     #     for tag in re.findall(re.search(pattern, str(row_tag))):
     #         pattern2 = '<a href="/problem/tag/[0-9]+" class="spoiler-link">'
     #         text += re.sub(pattern2, '', tag)[:-4] + ', '
-        
+
     #     embed.set_footer(text=text[:-2])
-        
+
     # embed.add_field(name="제출", value="12074", inline=True)
     # embed.add_field(name="정답", value="5689", inline=True)
     # embed.add_field(name="맞은 사람	", value="4115", inline=True)
     # embed.add_field(name="정답 비율", value="50.103%", inline=True)
     return embed
 
+
 def search_tier(tier_range: str, arg: str) -> str:
     api_url = r"https://solved.ac/api/v3/search/problem?sort=random&query=solvable:true tier:"
-    response = requests.get(api_url + tier_range + ' ' + arg, headers={'Content-Type': 'application/json'})
+    response = requests.get(api_url + tier_range + ' ' +
+                            arg, headers={'Content-Type': 'application/json'})
 
     if response.status_code == 404:
         return None

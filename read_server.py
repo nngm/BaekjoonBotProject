@@ -14,4 +14,3 @@ for k, v in servers.items():
         print(v, ':', prefixes[k])
     else:
         print(v, ':', '/')
-        

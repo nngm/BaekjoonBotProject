@@ -24,6 +24,7 @@ prefixes = {}
 servers = {}
 invite_link = r"http://baekjoonbot.kro.kr"
 
+
 def get_help_message(message, by_mention: bool = False) -> str:
     server_id = str(message.guild.id)
 
@@ -41,7 +42,7 @@ def get_help_message(message, by_mention: bool = False) -> str:
     ansi_green = '\u001b[32m'
     ansi_gray = '\u001b[30m'
 
-    try: 
+    try:
         if message.content.split()[1] == 'mobile':
             ansi_init = ''
             ansi_blue = ''
@@ -56,7 +57,7 @@ def get_help_message(message, by_mention: bool = False) -> str:
 
     descr += f'\n/{ansi_green}<problem number>{ansi_init}\n'
     descr += f'e.g. /1000\n'
-    
+
     descr += f'\n/{ansi_blue}user {ansi_green}<user name>{ansi_init}\n'
     descr += f'e.g. /user solvedac\n'
 
@@ -67,21 +68,21 @@ def get_help_message(message, by_mention: bool = False) -> str:
 
     descr += f'\n/{ansi_blue}prefix {ansi_green}<new prefix>{ansi_init}\n'
     descr += f'e.g. /prefix !\n'
-    
+
     descr += f'\n/{ansi_blue}invite{ansi_init}\n'
     descr += f'for the invite link\n'
-    
+
     descr += f'\n/{ansi_blue}step {ansi_green}[step number]{ansi_init}\n'
     descr += f'e.g. /step\n'
     descr += f'e.g. /step 1\n'
-    
+
     descr += f'\n/{ansi_blue}class {ansi_green}[class number]{ansi_init}\n'
     descr += f'e.g. /class\n'
     descr += f'e.g. /class 1\n'
 
     descr += f'\n/{ansi_blue}lang{ansi_init}\n'
     descr += f'bg cs en fr hr ja ko mn no pl pt ru sv th vi\n'
-    
+
     descr += f'\n*** 사이트 바로가기 ***\n'
     descr += f'/{ansi_blue}replit{ansi_init}\n'
     descr += f'/{ansi_blue}ries{ansi_init}\n'
@@ -92,10 +93,12 @@ def get_help_message(message, by_mention: bool = False) -> str:
 
     return descr
 
+
 bot = commands.Bot(
-    command_prefix=lambda bot, message: prefixes[str(message.guild.id)] 
-        if str(message.guild.id) in prefixes else basic_command_prefix)
+    command_prefix=lambda bot, message: prefixes[str(message.guild.id)]
+    if str(message.guild.id) in prefixes else basic_command_prefix)
 bot.remove_command('help')
+
 
 @bot.event
 async def on_ready():
@@ -104,7 +107,7 @@ async def on_ready():
 
     # custom activity for bots are not available now
     activity_name = f'{bot_initial} | Use {help_command} ' + \
-                     'to get current prefix and commands.'
+        'to get current prefix and commands.'
     await bot.change_presence(activity=discord.Game(activity_name))
 
     try:
@@ -115,7 +118,7 @@ async def on_ready():
         with open(prefix_file_name, 'w') as json_file:
             json_file.write(json.dumps({}))
         print('Empty "prefixes.json" file made.')
-    
+
     with open(prefix_file_name, 'r') as json_file:
         prefixes = json.loads(json_file.read())
 
@@ -127,7 +130,7 @@ async def on_ready():
         with open(server_file_name, 'w') as json_file:
             json_file.write(json.dumps({}))
         print('Empty "servers.json" file made.')
-    
+
     with open(server_file_name, 'r') as json_file:
         servers = json.loads(json_file.read())
 
@@ -136,25 +139,27 @@ async def on_ready():
     print(bot.user.id)
     print(datetime.datetime.today().strftime('%Y-%m-%d %X'))
     print('------')
-    
+
+
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, discord.ext.commands.CommandNotFound):
         return
     raise error
 
+
 @bot.command()
 async def prefix(ctx):  # change prefix
     server_id = str(ctx.guild.id)
-    
+
     try:
         new_prefix = ctx.message.content.split()[1]
     except:
         await ctx.send(f'Type `{help_command} prefix` for usage.')
         return
-    
+
     prefixes[server_id] = new_prefix
-    
+
     try:
         with open(prefix_file_name, 'w') as json_file:
             json_file.write(json.dumps(prefixes))
@@ -167,6 +172,7 @@ async def prefix(ctx):  # change prefix
         logger.log(f'used command: {ctx.message.content}')
     else:
         await ctx.send(f'The prefix for this server has changed to `{new_prefix}`.')
+
 
 @bot.command(aliases=['s'])
 async def step(ctx):    # https://www.acmicpc.net/step
@@ -202,6 +208,7 @@ async def step(ctx):    # https://www.acmicpc.net/step
             embed.set_author(name=f'{num}. ' + title, url=url)
             await ctx.send(content=url, embed=embed)
 
+
 @bot.command(aliases=['u'])
 async def user(ctx):    # user profile
     bj_url = r"https://www.acmicpc.net/user/"
@@ -219,21 +226,21 @@ async def user(ctx):    # user profile
 
     # bj_page = requests.get(bj_url)
     # bj_soup = BeautifulSoup(bj_page.content, 'html.parser')
-    
+
     # if bj.is404(bj_soup.title.string):
     #     embed = bj.embed_404('User')
     # else:
     bj_url += user_name
     ac_url += user_name
     message = bj_url
-    
+
     tier = bj.get_ac_tier(user_name)
 
     if user_name in bj.ac_administrators:
         tier = 'Administrator'
     if user_name in bj.ac_notratable:
         tier = 'Not ratable'
-        
+
     if tier is not None:
         embed = bj.set_embed(user_name, tier)
         message += '\n' + ac_url
@@ -243,6 +250,7 @@ async def user(ctx):    # user profile
     embed.set_author(name='User', url=bj_url)
 
     await ctx.send(content=message, embed=embed)
+
 
 @bot.command(aliases=['class'])
 async def c(ctx):   # solved.ac/class
@@ -262,10 +270,12 @@ async def c(ctx):   # solved.ac/class
             embed.set_author(name='CLASS ' + str(num), url=url)
             await ctx.send(content=url, embed=embed)
 
+
 @bot.command(aliases=['rd', 'rand', 'randomdefense', 'randomdefence'])
 async def random(ctx):
-    voted_tiers = ['bronze', 'silver', 'gold', 'platinum', 'diamond', 'ruby'] + list('bsgpdr')
-    
+    voted_tiers = ['bronze', 'silver', 'gold',
+                   'platinum', 'diamond', 'ruby'] + list('bsgpdr')
+
     try:
         tier_range = ctx.message.content.split()[1].lower()
     except:
@@ -289,9 +299,11 @@ async def random(ctx):
             tier_to = tier_to[0] + '1'
 
         if tier_from.isdecimal() and 1 <= int(tier_from) <= 30:
-            tier_from = 'bsgpdr'[~-int(tier_from) // 5] + '54321'[~-int(tier_from) % 5]
+            tier_from = 'bsgpdr'[
+                ~-int(tier_from) // 5] + '54321'[~-int(tier_from) % 5]
         if tier_to.isdecimal() and 1 <= int(tier_to) <= 30:
-            tier_to = 'bsgpdr'[~-int(tier_to) // 5] + '54321'[~-int(tier_to) % 5]
+            tier_to = 'bsgpdr'[~-int(tier_to) // 5] + \
+                '54321'[~-int(tier_to) % 5]
 
         tier_range = tier_from + '..' + tier_to
     else:
@@ -305,7 +317,8 @@ async def random(ctx):
             tier_range = tier_range[0] + tier_range[-1]
 
         if tier_range.isdecimal() and 1 <= int(tier_range) <= 30:
-            tier_range = 'bsgpdr'[~-int(tier_range) // 5] + '54321'[~-int(tier_range) % 5]
+            tier_range = 'bsgpdr'[
+                ~-int(tier_range) // 5] + '54321'[~-int(tier_range) % 5]
 
     if re.match('(u|unrated|0|(b|s|g|p|d|r)(1|2|3|4|5))(\.\.(b|s|g|p|d|r)(1|2|3|4|5))?$', tier_range) is None:
         await ctx.send('Argument is not valid.')
@@ -321,29 +334,36 @@ async def random(ctx):
     embed = bj.get_embed(problem_number)
     await ctx.send(content=url, embed=embed)
 
+
 @bot.command(aliases=['language', 'languages'])
 async def lang(ctx):
     await ctx.send("Languages available in solved.ac: bg cs en fr hr ja ko mn no pl pt ru sv th vi")
+
 
 @bot.command(aliases=['repl'])
 async def replit(ctx):
     await ctx.send(r"https://repl.it/")
 
+
 @bot.command()
 async def ries(ctx):
     await ctx.send(r"https://blog.naver.com/PostList.nhn?blogId=kks227&categoryNo=299")
+
 
 @bot.command()
 async def 점투파(ctx):
     await ctx.send(r"https://wikidocs.net/book/1")
 
+
 @bot.command()
 async def 코딩도장(ctx):
     await ctx.send(r"https://dojang.io/course/view.php?id=7")
 
+
 @bot.command(aliases=['invite_link'])
 async def invite(ctx):
     await ctx.send(invite_link)
+
 
 @bot.command(aliases=['colour'])
 async def color(ctx):
@@ -351,6 +371,7 @@ async def color(ctx):
     import re
     if re.search(r"^[a-fA-F0-9]{6}$", color_code):
         await ctx.send(embed=discord.Embed(title='#'+color_code.upper(), color=int(color_code, 16)))
+
 
 @bot.event
 async def on_message(message):
@@ -382,7 +403,7 @@ async def on_message(message):
             print('command initialized in', server_id)
 
     command_prefix = prefixes[str(message.guild.id)] if str(message.guild.id) in prefixes\
-                     else basic_command_prefix
+        else basic_command_prefix
 
     if message.content.startswith(command_prefix) and bj.isvalid(message.content[len(command_prefix):]):
         problem_number = message.content[len(command_prefix):]
