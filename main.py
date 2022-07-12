@@ -24,6 +24,20 @@ prefixes = {}
 servers = {}
 invite_link = r"http://baekjoonbot.kro.kr"
 
+def log_command(message):
+    today = datetime.datetime.today()
+    time = today.strftime('%Y-%m-%d %X')
+
+    print(f'At {time}')
+    print(f'in server {servers[message.guild.id]} ({message.guild.id})')
+    print(f'by {message.author.nick} ({message.author.name}#{message.author.discriminator}) ({message.author.id})')
+    print(f'Command: {message.content}')
+
+
+def on_command_decorator(ctx: discord.ext.commands.Context):
+    log_command(ctx.message)
+    return True
+
 
 def get_help_message(message, by_mention: bool = False) -> str:
     server_id = str(message.guild.id)
@@ -149,6 +163,7 @@ async def on_command_error(ctx, error):
 
 
 @bot.command()
+@commands.check(on_command_decorator)
 async def prefix(ctx):  # change prefix
     server_id = str(ctx.guild.id)
 
@@ -175,6 +190,7 @@ async def prefix(ctx):  # change prefix
 
 
 @bot.command(aliases=['s'])
+@commands.check(on_command_decorator)
 async def step(ctx):    # https://www.acmicpc.net/step
     dic = [ 0, 1, 4, 3, 6,  5,  7,  8, 10, 19, 22,
             9, 49, 50, 18, 34, 16, 48, 33, 11, 12,
@@ -210,6 +226,7 @@ async def step(ctx):    # https://www.acmicpc.net/step
 
 
 @bot.command(aliases=['u'])
+@commands.check(on_command_decorator)
 async def user(ctx):    # user profile
     bj_url = r"https://www.acmicpc.net/user/"
     ac_url = r"https://solved.ac/profile/"
@@ -253,6 +270,7 @@ async def user(ctx):    # user profile
 
 
 @bot.command(aliases=['class'])
+@commands.check(on_command_decorator)
 async def c(ctx):   # solved.ac/class
     url = r"https://solved.ac/class"
     if len(ctx.message.content.split()) == 1:
@@ -272,6 +290,7 @@ async def c(ctx):   # solved.ac/class
 
 
 @bot.command(aliases=['rd', 'rand', 'randomdefense', 'randomdefence'])
+@commands.check(on_command_decorator)
 async def random(ctx):
     voted_tiers = ['bronze', 'silver', 'gold',
                    'platinum', 'diamond', 'ruby'] + list('bsgpdr')
@@ -336,36 +355,43 @@ async def random(ctx):
 
 
 @bot.command(aliases=['language', 'languages'])
+@commands.check(on_command_decorator)
 async def lang(ctx):
     await ctx.send("Languages available in solved.ac: bg cs en fr hr ja ko mn no pl pt ru sv th vi")
 
 
 @bot.command(aliases=['repl'])
+@commands.check(on_command_decorator)
 async def replit(ctx):
     await ctx.send(r"https://repl.it/")
 
 
 @bot.command()
+@commands.check(on_command_decorator)
 async def ries(ctx):
     await ctx.send(r"https://blog.naver.com/PostList.nhn?blogId=kks227&categoryNo=299")
 
 
 @bot.command()
+@commands.check(on_command_decorator)
 async def 점투파(ctx):
     await ctx.send(r"https://wikidocs.net/book/1")
 
 
 @bot.command()
+@commands.check(on_command_decorator)
 async def 코딩도장(ctx):
     await ctx.send(r"https://dojang.io/course/view.php?id=7")
 
 
 @bot.command(aliases=['invite_link'])
+@commands.check(on_command_decorator)
 async def invite(ctx):
     await ctx.send(invite_link)
 
 
 @bot.command(aliases=['colour'])
+@commands.check(on_command_decorator)
 async def color(ctx):
     color_code = ctx.message.content.split()[1]
     import re
@@ -410,6 +436,7 @@ async def on_message(message):
         url = bj.get_url(problem_number)
         embed = bj.get_embed(problem_number)
         await message.channel.send(content=url, embed=embed)
+        log_command(message)
 
     await bot.process_commands(message)
 
