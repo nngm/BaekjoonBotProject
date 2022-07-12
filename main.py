@@ -24,7 +24,7 @@ prefixes = {}
 servers = {}
 invite_link = r"http://baekjoonbot.kro.kr"
 
-def log_command(message):
+def log_command(message: discord.Message):
     print(f'At {datetime.datetime.today().strftime("%Y-%m-%d %X")}')
     print(f'in server {servers[message.guild.id]} ({message.guild.id})')
     print(f'by {message.author.nick} ({message.author.name}#{message.author.discriminator}) ({message.author.id})')
@@ -37,7 +37,7 @@ def on_command_decorator(ctx: discord.ext.commands.Context):
     return True
 
 
-def get_help_message(message, by_mention: bool = False) -> str:
+def get_help_message(message: discord.Message, by_mention: bool = False) -> str:
     server_id = str(message.guild.id)
 
     # if message.content == help_command
@@ -154,7 +154,7 @@ async def on_ready():
 
 
 @bot.event
-async def on_command_error(ctx, error):
+async def on_command_error(ctx: discord.ext.commands.Context, error):
     if isinstance(error, discord.ext.commands.CommandNotFound):
         return
     raise error
@@ -162,7 +162,7 @@ async def on_command_error(ctx, error):
 
 @bot.command()
 @commands.check(on_command_decorator)
-async def prefix(ctx):  # change prefix
+async def prefix(ctx: discord.ext.commands.Context):  # change prefix
     server_id = str(ctx.guild.id)
 
     try:
@@ -189,7 +189,7 @@ async def prefix(ctx):  # change prefix
 
 @bot.command(aliases=['s'])
 @commands.check(on_command_decorator)
-async def step(ctx):    # https://www.acmicpc.net/step
+async def step(ctx: discord.ext.commands.Context):    # https://www.acmicpc.net/step
     dic = [ 0, 1, 4, 3, 6,  5,  7,  8, 10, 19, 22,
             9, 49, 50, 18, 34, 16, 48, 33, 11, 12,
            20, 29, 13, 17, 24, 26, 59, 41, 23, 14,
@@ -225,7 +225,7 @@ async def step(ctx):    # https://www.acmicpc.net/step
 
 @bot.command(aliases=['u'])
 @commands.check(on_command_decorator)
-async def user(ctx):    # user profile
+async def user(ctx: discord.ext.commands.Context):    # user profile
     bj_url = r"https://www.acmicpc.net/user/"
     ac_url = r"https://solved.ac/profile/"
 
@@ -269,7 +269,7 @@ async def user(ctx):    # user profile
 
 @bot.command(aliases=['class'])
 @commands.check(on_command_decorator)
-async def c(ctx):   # solved.ac/class
+async def c(ctx: discord.ext.commands.Context):   # solved.ac/class
     url = r"https://solved.ac/class"
     if len(ctx.message.content.split()) == 1:
         await ctx.send(url)
@@ -289,7 +289,7 @@ async def c(ctx):   # solved.ac/class
 
 @bot.command(aliases=['rd', 'rand', 'randomdefense', 'randomdefence'])
 @commands.check(on_command_decorator)
-async def random(ctx):
+async def random(ctx: discord.ext.commands.Context):
     voted_tiers = ['bronze', 'silver', 'gold',
                    'platinum', 'diamond', 'ruby'] + list('bsgpdr')
 
@@ -354,43 +354,43 @@ async def random(ctx):
 
 @bot.command(aliases=['language', 'languages'])
 @commands.check(on_command_decorator)
-async def lang(ctx):
+async def lang(ctx: discord.ext.commands.Context):
     await ctx.send("Languages available in solved.ac: bg cs en fr hr ja ko mn no pl pt ru sv th vi")
 
 
 @bot.command(aliases=['repl'])
 @commands.check(on_command_decorator)
-async def replit(ctx):
+async def replit(ctx: discord.ext.commands.Context):
     await ctx.send(r"https://repl.it/")
 
 
 @bot.command()
 @commands.check(on_command_decorator)
-async def ries(ctx):
+async def ries(ctx: discord.ext.commands.Context):
     await ctx.send(r"https://blog.naver.com/PostList.nhn?blogId=kks227&categoryNo=299")
 
 
 @bot.command()
 @commands.check(on_command_decorator)
-async def 점투파(ctx):
+async def 점투파(ctx: discord.ext.commands.Context):
     await ctx.send(r"https://wikidocs.net/book/1")
 
 
 @bot.command()
 @commands.check(on_command_decorator)
-async def 코딩도장(ctx):
+async def 코딩도장(ctx: discord.ext.commands.Context):
     await ctx.send(r"https://dojang.io/course/view.php?id=7")
 
 
 @bot.command(aliases=['invite_link'])
 @commands.check(on_command_decorator)
-async def invite(ctx):
+async def invite(ctx: discord.ext.commands.Context):
     await ctx.send(invite_link)
 
 
 @bot.command(aliases=['colour'])
 @commands.check(on_command_decorator)
-async def color(ctx):
+async def color(ctx: discord.ext.commands.Context):
     color_code = ctx.message.content.split()[1]
     import re
     if re.search(r"^[a-fA-F0-9]{6}$", color_code):
@@ -398,7 +398,7 @@ async def color(ctx):
 
 
 @bot.event
-async def on_message(message):
+async def on_message(message: discord.Message):
     global servers
     server = message.guild
     if server.id not in servers or servers[server.id] != server.name:
