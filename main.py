@@ -25,13 +25,11 @@ servers = {}
 invite_link = r"http://baekjoonbot.kro.kr"
 
 def log_command(message):
-    today = datetime.datetime.today()
-    time = today.strftime('%Y-%m-%d %X')
-
-    print(f'At {time}')
+    print(f'At {datetime.datetime.today().strftime("%Y-%m-%d %X")}')
     print(f'in server {servers[message.guild.id]} ({message.guild.id})')
     print(f'by {message.author.nick} ({message.author.name}#{message.author.discriminator}) ({message.author.id})')
     print(f'Command: {message.content}')
+    print()
 
 
 def on_command_decorator(ctx: discord.ext.commands.Context):
