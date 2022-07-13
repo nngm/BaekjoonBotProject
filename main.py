@@ -14,7 +14,7 @@ import baekjoon as bj
 
 admins = {279832973841530880}
 basic_command_prefix = '/'
-bot_name = 'BaekjooneBot'
+bot_name = 'BaekjoonBot'
 bot_initial = 'BB'
 prefix_file_name = 'prefixes.json'
 server_file_name = 'servers.json'
