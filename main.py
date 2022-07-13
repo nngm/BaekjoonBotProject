@@ -12,7 +12,7 @@ import __token__
 import logger
 import baekjoon as bj
 
-admins = {279832973841530880}
+bot_admins = {279832973841530880}
 basic_command_prefix = '/'
 bot_name = 'BaekjoonBot'
 bot_initial = 'BB'
@@ -24,7 +24,12 @@ prefixes = {}
 servers = {}
 invite_link = r"http://baekjoonbot.kro.kr"
 
-def log_command(message: discord.Message):
+
+def sent_by_admin(ctx: discord.ext.commands.Context) -> bool:
+    return ctx.message.author.id in bot_admins
+
+
+def log_command(message: discord.Message) -> None:
     print(f'At {datetime.datetime.today().strftime("%Y-%m-%d %X")}')
     print(f'in server {servers[message.guild.id]} ({message.guild.id})')
     print(f'by {message.author.nick} ({message.author.name}#{message.author.discriminator}) ({message.author.id})')
@@ -32,7 +37,7 @@ def log_command(message: discord.Message):
     print()
 
 
-def on_command_decorator(ctx: discord.ext.commands.Context):
+def on_command_decorator(ctx: discord.ext.commands.Context) -> True:
     log_command(ctx.message)
     return True
 
@@ -397,6 +402,13 @@ async def color(ctx: discord.ext.commands.Context):
         await ctx.send(embed=discord.Embed(title='#'+color_code.upper(), color=int(color_code, 16)))
 
 
+@bot.command(aliases=['eval'])
+@commands.check(on_command_decorator)
+@commands.check(sent_by_admin)
+async def evaluate(ctx: discord.ext.commands.Context):
+    await ctx.send('```' + eval(' '.join(ctx.message.content.split()[1:])) + '```')
+
+
 @bot.event
 async def on_message(message: discord.Message):
     global servers
@@ -420,11 +432,12 @@ async def on_message(message: discord.Message):
     if message.content == help_command or message.content.startswith(help_command + ' '):
         await message.channel.send(get_help_message(message))
 
-    if message.content.startswith(init_command) and message.author.id in admins:
+    if message.content.startswith(init_command) and message.author.id in bot_admins:
         if len(message.content.split()) > 1:
             server_id = message.content.split()[1]
             prefixes[server_id] = '/'
             print('command initialized in', server_id)
+        log_command(message)
 
     command_prefix = prefixes[str(message.guild.id)] if str(message.guild.id) in prefixes\
         else basic_command_prefix
