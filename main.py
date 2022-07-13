@@ -406,7 +406,7 @@ async def color(ctx: discord.ext.commands.Context):
 @commands.check(on_command_decorator)
 @commands.check(sent_by_admin)
 async def evaluate(ctx: discord.ext.commands.Context):
-    await ctx.send('```' + eval(' '.join(ctx.message.content.split()[1:])) + '```')
+    await ctx.send('```' + str(eval(' '.join(ctx.message.content.split()[1:]))) + '```')
 
 
 @bot.event
