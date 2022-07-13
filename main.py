@@ -406,7 +406,13 @@ async def color(ctx: discord.ext.commands.Context):
 @commands.check(on_command_decorator)
 @commands.check(sent_by_admin)
 async def evaluate(ctx: discord.ext.commands.Context):
-    await ctx.send('```' + str(eval(' '.join(ctx.message.content.split()[1:]))) + '```')
+    try:
+        res = eval(' '.join(ctx.message.content.split()[1:]))
+    except Exception as e:
+        res = e
+        raise e
+    finally:
+        await ctx.send('```\n' + str(res) + '```')
 
 
 @bot.event
