@@ -111,9 +111,13 @@ def get_help_message(message: discord.Message, by_mention: bool = False) -> str:
     return descr
 
 
+intents = discord.Intents.default()
+intents.members = True
+
 bot = commands.Bot(
     command_prefix=lambda bot, message: prefixes[str(message.guild.id)]
-    if str(message.guild.id) in prefixes else basic_command_prefix)
+    if str(message.guild.id) in prefixes else basic_command_prefix,
+    intents=intents)
 bot.remove_command('help')
 
 
