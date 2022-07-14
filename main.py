@@ -2,6 +2,7 @@ import asyncio
 import re
 import json
 import datetime
+import numpy
 
 # import requests
 # from bs4 import BeautifulSoup
@@ -404,6 +405,29 @@ async def color(ctx: discord.ext.commands.Context):
     import re
     if re.search(r"^[a-fA-F0-9]{6}$", color_code):
         await ctx.send(embed=discord.Embed(title='#'+color_code.upper(), color=int(color_code, 16)))
+
+
+@bot.command(aliases=['try'])
+@commands.check(on_command_decorator)
+async def geometric(ctx: discord.ext.commands.Context):
+    try:
+        probability = ctx.message.content.split()[1]
+        if probability[-1] == '%':
+            probability = float(probability[:-1]) / 100
+        else:
+            probability = float(probability)
+        
+        res = numpy.random.geometric(probability)
+        plural = 's' if res > 1 else ''
+        mean = 1 / probability
+        variance = (1 - probability) / probability / probability
+        
+        await ctx.send(f'You have succeeded in `{res}` trial{plural}!\n'
+                       f'The expected value and the standard deviation of trials were '
+                       f'`{mean:.3f}` and `{numpy.sqrt(variance):.3f}` each.')
+    except:
+        await ctx.send('You should give the success probability 0 < p < 1 as an argument.')
+        return
 
 
 @bot.command(aliases=['eval'])
