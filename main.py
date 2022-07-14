@@ -33,7 +33,8 @@ def sent_by_admin(ctx: discord.ext.commands.Context) -> bool:
 def log_command(message: discord.Message) -> None:
     a = message.author
     print(f'At {datetime.datetime.today().strftime("%Y-%m-%d %X")}')
-    print(f'in server {servers[message.guild.id]} ({message.guild.id})')
+    print(f'in #{message.channel.name} ({message.channel.id})')
+    print(f'of {servers[message.guild.id]} ({message.guild.id})')
     print(f'by {a.display_name} ({a.name}#{a.discriminator}) ({a.id})')
     print(f'Command: {message.content}')
     print()
