@@ -421,11 +421,9 @@ async def geometric(ctx: discord.ext.commands.Context):
         res = numpy.random.geometric(probability)
         plural = 's' if res > 1 else ''
         mean = 1 / probability
-        variance = (1 - probability) / probability / probability
         
         await ctx.send(f'You have succeeded in `{res:,}` trial{plural}!\n'
-                       f'The expected value and the standard deviation of trials were '
-                       f'`{mean:,.3f}` and `{numpy.sqrt(variance):,.3f}` each.')
+                       f'The expected value of trials was `{mean:,.3f}`.')
     except:
         await ctx.send('You should give the success probability 0 < p < 1 as an argument.')
         return
