@@ -134,6 +134,8 @@ def get_embed(number: str):
     problem = json.loads(response.text)
     title = problem["titleKo"]
     tier = tier_name[problem["level"]]
+    if problem["isLevelLocked"]:
+        tier = "Not ratable"
     # tier_icon = re.sub('^.*src="', '', str(ac_soup.img))[:-3]
 
     try:
