@@ -34,7 +34,10 @@ def log_command(message: discord.Message) -> None:
     a = message.author
     print(f'At {datetime.datetime.today().strftime("%Y-%m-%d %X")}')
     print(f'in #{message.channel.name} ({message.channel.id})')
-    print(f'of {servers[message.guild.id]} ({message.guild.id})')
+    try:
+        print(f'of {servers[message.guild.id]} ({message.guild.id})')
+    except:
+        pass
     print(f'by {a.display_name} ({a.name}#{a.discriminator}) ({a.id})')
     print(f'Command: {message.content}')
     print()
@@ -310,7 +313,7 @@ async def random(ctx: discord.ext.commands.Context):
     except:
         tier_range = 'all'
     try:
-        arg = ' '.join(ctx.message.content.split()[2:])
+        arg = ctx.message.content.split(None, 2)[2]
     except:
         arg = ''
 
@@ -424,7 +427,7 @@ async def geometric(ctx: discord.ext.commands.Context):
         mean = 1 / probability
         
         await ctx.send(f'You have succeeded in `{res:,}` trial{plural}!\n'
-                       f'The expected value of trials was `{mean:,.3f}`.')
+                       f'The expected value of trials was `{mean:,.2f}`.')
     except:
         await ctx.send('You should give the success probability 0 < p < 1 as an argument.')
         return
@@ -435,7 +438,7 @@ async def geometric(ctx: discord.ext.commands.Context):
 @commands.check(sent_by_admin)
 async def evaluate(ctx: discord.ext.commands.Context):
     try:
-        res = eval(' '.join(ctx.message.content.split()[1:]))
+        res = eval(ctx.message.content.split(None, 1)[1])
     except Exception as e:
         res = e
         raise e
