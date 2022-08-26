@@ -13,7 +13,7 @@ ac_notratable = {'startlink'}
 color = {"Not": 0x2d2d2d, "Unrated": 0x2d2d2d, "Bronze": 0xad5600,
          "Silver": 0x435f7a, "Gold": 0xec9a00, "Platinum": 0x27e2a4,
          "Diamond": 0x0094fc, "Ruby": 0xff0062, "Master": 0xb300e0,
-         "Administrator": 0x17ce3a}
+         "Administrator": 0x17ce3a, "새싹": 0x96cc00}
 
 tier_name = ["Unrated", "Bronze V", "Bronze IV", "Bronze III", "Bronze II",
              "Bronze I", "Silver V", "Silver IV", "Silver III", "Silver II",
@@ -55,7 +55,8 @@ emoji = {"Unrated": "<:unranked:833235211181490186>",
          "Ruby II": "<:ruby2:833235211021058050>",
          "Ruby I": "<:ruby1:833235210958929940>",
          "Master": "<:master:860880287172788265>",
-         "Administrator": "<:admin:863338449935138847>"}
+         "Administrator": "<:admin:863338449935138847>",
+         "새싹": "<:sprout:999597535863783444>"}
 
 # def rom2num(number: str) -> str:
 #     number = re.sub(' v$', '5', number)
@@ -135,7 +136,10 @@ def get_embed(number: str):
     title = problem["titleKo"]
     tier = tier_name[problem["level"]]
     if problem["isLevelLocked"]:
-        tier = "Not ratable"
+        if problem["level"] == 0:
+            tier = "Not ratable"
+        elif problem["sprout"]:
+            tier = "새싹"
     # tier_icon = re.sub('^.*src="', '', str(ac_soup.img))[:-3]
 
     try:
