@@ -1,14 +1,11 @@
 # launcher
 BaekjoonBot.bat
 
-# 토큰 보호
+# hide token
 __token__.py
 
-# prefix info per servers
-prefixes.json
-
-# list of servers
-servers.json
+# json files
+*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
