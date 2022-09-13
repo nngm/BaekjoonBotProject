@@ -184,3 +184,27 @@ def search_tier(tier_range: str, arg: str) -> str:
         return None
 
     return problem["problemId"]
+
+
+def search_problem(query: str, raw: bool) -> list:
+    api_url = r"https://solved.ac/api/v3/search/problem?query="
+
+    if not raw:
+        query = '"' + query + '"'
+    
+    response = requests.get(api_url + query, headers={'Content-Type': 'application/json'})
+
+    if response.status_code == 404:
+        return None
+
+    if not raw and json.loads(response.text)["count"] == 0:
+        raw = True
+        query = query[1:-1]
+        response = requests.get(api_url + query, headers={'Content-Type': 'application/json'})
+
+    if raw:
+        problems = json.loads(response.text)["items"][:5]
+    else:
+        problems = json.loads(response.text)["items"]
+
+    return [problem["problemId"] for problem in problems][0:1]

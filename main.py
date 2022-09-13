@@ -144,7 +144,7 @@ async def on_ready():
     except FileNotFoundError:
         with open(prefix_file_name, 'w') as json_file:
             json_file.write(json.dumps({}))
-        print('Empty "prefixes.json" file made.')
+        print(f'Empty "{prefix_file_name}" file made.')
 
     with open(prefix_file_name, 'r') as json_file:
         prefixes = json.loads(json_file.read())
@@ -279,6 +279,52 @@ async def user(ctx: discord.ext.commands.Context):    # user profile
 
     embed.set_author(name='User', url=bj_url)
 
+    await ctx.send(content=message, embed=embed)
+
+
+@bot.command()
+@commands.check(on_command_decorator)
+async def search(ctx: discord.ext.commands.Context):
+    try:
+        query = ctx.message.content.split(None, 1)[1]
+    except:
+        await ctx.send('You should give the search query as an argument.')
+        return
+
+    problems = bj.search_problem(query, raw=False)
+
+    if len(problems) == 0:
+        await ctx.send(content="No problem found")
+        return
+    
+    message = ''
+    for problem in problems:
+        message += bj.get_url(problem) + '\n'
+        embed = bj.get_embed(problem)
+    
+    await ctx.send(content=message, embed=embed)
+
+
+@bot.command(aliases=['rs', 'rawsearch'])
+@commands.check(on_command_decorator)
+async def raw_search(ctx: discord.ext.commands.Context):
+    try:
+        query = ctx.message.content.split(None, 1)[1]
+    except:
+        await ctx.send('You should give the search query as an argument.')
+        return
+
+    problems = bj.search_problem(query, raw=True)
+
+    if len(problems) == 0:
+        await ctx.send(content="No problem found")
+        return
+    
+    message = ''
+    for problem in problems:
+        message += bj.get_url(problem) + '\n'
+        embed = bj.get_embed(problem)
+    
     await ctx.send(content=message, embed=embed)
 
 
