@@ -65,17 +65,6 @@ def get_help_message(message: discord.Message, by_mention: bool = False) -> str:
     ansi_green = '\u001b[32m'
     ansi_gray = '\u001b[30m'
 
-    try:
-        if message.content.split()[1] == 'mobile':
-            ansi_init = ''
-            ansi_blue = ''
-            ansi_green = ''
-            ansi_gray = ''
-    except:
-        pass
-
-    descr += f'Enter `/help mobile` if you are on mobile.\n'
-
     descr += f'```ansi'
 
     descr += f'\n/{ansi_green}<problem number>{ansi_init}\n'
