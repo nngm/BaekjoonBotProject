@@ -447,6 +447,42 @@ async def color(ctx: discord.ext.commands.Context):
         await ctx.send(embed=discord.Embed(title='#'+color_code.upper(), color=int(color_code, 16)))
 
 
+@bot.command(aliases=['f2e'])
+@commands.check(on_command_decorator)
+async def fen2emoji(ctx: discord.ext.commands.Context):
+    FEN = ctx.message.content.split()[1]
+    res = ''
+    cnt = 0
+    flag = True
+
+    for c in FEN:
+        if c.isdecimal():
+            for _ in range(int(c)):
+                res += ':e' + 'wb'[cnt % 2] + 's:'
+                cnt += 1
+        else:
+            if c == '/':
+                res += '\n'
+                cnt += 1
+                continue
+            elif c not in 'KkQqRrBbNnPp':
+                flag = False
+                break
+
+            if c.isupper():
+                res += ':w'
+                c = c.lower()
+            else:
+                res += ':b'
+            res += c + 'wb'[cnt % 2] + ':'
+            cnt += 1
+
+    if flag:
+        await ctx.send(res)
+    else:
+        await ctx.send('Invalid FEN format.')
+
+
 @bot.command(aliases=['try'])
 @commands.check(on_command_decorator)
 async def geometric(ctx: discord.ext.commands.Context):
