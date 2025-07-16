@@ -27,7 +27,7 @@ Follow these instructions to get a local copy of the bot up and running.
 
 1.  **Clone the repository:**
     ```bash
-    git clone <repository-url>
+    git clone -b feat/modernize-project https://github.com/nngm/BaekjoonBotProject.git
     cd BaekjoonBotProject
     ```
 
