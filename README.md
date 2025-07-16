@@ -39,12 +39,9 @@ Follow these instructions to get a local copy of the bot up and running.
     ```
 
 3.  **Configure the Bot Token:**
-    The bot requires a Discord bot token to run.
-    - Rename the `.env.example` file to `.env`.
-    - Open the `.env` file and replace `YOUR_BOT_TOKEN_HERE` with your actual Discord bot token.
-    ```
-    # .env
-    DISCORD_TOKEN="YOUR_BOT_TOKEN_HERE"
+    Run the interactive setup script. This will prompt you for your Discord bot token and create the necessary `.env` file.
+    ```bash
+    ./setup.sh
     ```
 
 ### Running the Bot
