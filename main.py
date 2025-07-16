@@ -230,44 +230,20 @@ async def step(ctx: discord.ext.commands.Context):    # https://www.acmicpc.net/
 @bot.command(aliases=['u'])
 @commands.check(on_command_decorator)
 async def user(ctx: discord.ext.commands.Context):    # user profile
-    bj_url = r"https://www.acmicpc.net/user/"
-    ac_url = r"https://solved.ac/profile/"
-
     try:
-        user_name = bj.get_user_name(ctx.message.content.split()[1])
-        if user_name is None:
-            user_name = ctx.message.content.split()[1]
-    except:
+        user_name = ctx.message.content.split()[1]
+    except IndexError:
         await ctx.send(f'Type `{help_command} user` for usage.')
         return
 
-    # message = bj_url + user_name
+    user_obj = bj.get_user(user_name)
 
-    # bj_page = requests.get(bj_url)
-    # bj_soup = BeautifulSoup(bj_page.content, 'html.parser')
+    if user_obj is None:
+        await ctx.send(embed=bj.embed_404('User'))
+        return
 
-    # if bj.is404(bj_soup.title.string):
-    #     embed = bj.embed_404('User')
-    # else:
-    bj_url += user_name
-    ac_url += user_name
-    message = bj_url
-
-    tier = bj.get_ac_tier(user_name)
-
-    if user_name in bj.ac_administrators:
-        tier = 'Administrator'
-    if user_name in bj.ac_notratable:
-        tier = 'Not ratable'
-
-    if tier is not None:
-        embed = bj.set_embed(user_name, tier)
-        message += '\n' + ac_url
-    else:
-        embed = discord.Embed(title=user_name)
-
-    embed.set_author(name='User', url=bj_url)
-
+    message = f"{user_obj.acmicpc_url}\n{user_obj.solvedac_url}"
+    embed = bj.create_user_embed(user_obj)
     await ctx.send(content=message, embed=embed)
 
 
@@ -276,22 +252,19 @@ async def user(ctx: discord.ext.commands.Context):    # user profile
 async def search(ctx: discord.ext.commands.Context):
     try:
         query = ctx.message.content.split(None, 1)[1]
-    except:
+    except IndexError:
         await ctx.send('You should give the search query as an argument.')
         return
 
     problems = bj.search_problem(query, raw=False)
 
-    if len(problems) == 0:
+    if not problems:
         await ctx.send(content="No problem found")
         return
     
-    message = ''
-    for problem in problems:
-        message += bj.get_url(problem) + '\n'
-        embed = bj.get_embed(problem)
-    
-    await ctx.send(content=message, embed=embed)
+    problem = problems[0]
+    embed = bj.create_problem_embed(problem)
+    await ctx.send(content=problem.url, embed=embed)
 
 
 @bot.command(aliases=['rs', 'rawsearch'])
@@ -299,22 +272,27 @@ async def search(ctx: discord.ext.commands.Context):
 async def raw_search(ctx: discord.ext.commands.Context):
     try:
         query = ctx.message.content.split(None, 1)[1]
-    except:
+    except IndexError:
         await ctx.send('You should give the search query as an argument.')
         return
 
     problems = bj.search_problem(query, raw=True)
 
-    if len(problems) == 0:
+    if not problems:
         await ctx.send(content="No problem found")
         return
     
-    message = ''
+    # This command can return multiple problems, but the old code only showed the first one.
+    # For now, preserving the original behavior.
+    # A potential improvement is to show a list of results.
+    message = ""
+    embeds = []
     for problem in problems:
-        message += bj.get_url(problem) + '\n'
-        embed = bj.get_embed(problem)
-    
-    await ctx.send(content=message, embed=embed)
+        message += problem.url + '\n'
+        embeds.append(bj.create_problem_embed(problem))
+
+    # Sending the first embed for now to mimic old behavior
+    await ctx.send(content=problems[0].url, embed=embeds[0])
 
 
 @bot.command(aliases=['class'])
@@ -387,19 +365,19 @@ async def random(ctx: discord.ext.commands.Context):
             tier_range = 'bsgpdr'[
                 ~-int(tier_range) // 5] + '54321'[~-int(tier_range) % 5]
 
-    if re.match('(u|unrated|0|(b|s|g|p|d|r)(1|2|3|4|5))(\.\.(b|s|g|p|d|r)(1|2|3|4|5))?$', tier_range) is None:
+    if re.match('(u|unrated|0|(b|s|g|p|d|r)(1|2|3|4|5))(\.\.(b|s|g|p|d|r)(1|2|3|4|5))?
+, tier_range) is None:
         await ctx.send('Argument is not valid.')
         return
 
-    problem_number = bj.search_tier(tier_range, arg)
+    problem = bj.search_tier(tier_range, arg)
 
-    if problem_number is None:
+    if problem is None:
         await ctx.send(content="No problem found")
         return
 
-    url = bj.get_url(problem_number)
-    embed = bj.get_embed(problem_number)
-    await ctx.send(content=url, embed=embed)
+    embed = bj.create_problem_embed(problem)
+    await ctx.send(content=problem.url, embed=embed)
 
 
 @bot.command(aliases=['language', 'languages'])
@@ -584,9 +562,13 @@ async def on_message(message: discord.Message):
 
     if message.content.startswith(command_prefix) and bj.isvalid(message.content[len(command_prefix):]):
         problem_number = message.content[len(command_prefix):]
-        url = bj.get_url(problem_number)
-        embed = bj.get_embed(problem_number)
-        await message.channel.send(content=url, embed=embed)
+        problem = bj.get_problem(problem_number)
+        if problem:
+            embed = bj.create_problem_embed(problem)
+            await message.channel.send(content=problem.url, embed=embed)
+        else:
+            embed = bj.embed_404('Problem')
+            await message.channel.send(embed=embed)
         log_command(message)
 
     await bot.process_commands(message)
