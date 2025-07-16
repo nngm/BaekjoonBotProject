@@ -2,7 +2,6 @@ import asyncio
 import re
 import json
 import datetime
-import numpy
 
 # import requests
 # from bs4 import BeautifulSoup
@@ -493,38 +492,38 @@ async def fen2emoji(ctx: discord.ext.commands.Context):
         await ctx.send('Invalid FEN format.')
 
 
+import random as rand
+
 @bot.command(aliases=['try'])
 @commands.check(on_command_decorator)
 async def geometric(ctx: discord.ext.commands.Context):
     try:
-        probability = ctx.message.content.split()[1]
-        if probability[-1] == '%':
-            probability = float(probability[:-1]) / 100
+        probability_str = ctx.message.content.split()[1]
+        if probability_str.endswith('%'):
+            probability = float(probability_str[:-1]) / 100
         else:
-            probability = float(probability)
-        
-        res = numpy.random.geometric(probability)
-        plural = 's' if res > 1 else ''
-        mean = 1 / probability
-        
-        await ctx.send(f'You have succeeded in `{res:,}` trial{plural}!\n'
-                       f'The expected value of trials was `{mean:,.2f}`.')
-    except:
-        await ctx.send('You should give the success probability 0 < p < 1 as an argument.')
+            probability = float(probability_str)
+
+        if not (0 < probability <= 1):
+            raise ValueError("Probability must be between 0 and 1.")
+
+    except (ValueError, IndexError):
+        await ctx.send('You should give the success probability (e.g., `0.5` or `50%`) as an argument.')
         return
 
+    # Geometric distribution: number of trials to get the first success.
+    # This can be simulated by counting how many failures occur before a success.
+    trials = 1
+    while rand.random() > probability:
+        trials += 1
+            
+    plural = 's' if trials > 1 else ''
+    mean = 1 / probability
+    
+    await ctx.send(f'You have succeeded in `{trials:,}` trial{plural}!\n'
+                   f'The expected value of trials was `{mean:,.2f}`.')
 
-@bot.command(aliases=['eval'])
-@commands.check(on_command_decorator)
-@commands.check(sent_by_admin)
-async def evaluate(ctx: discord.ext.commands.Context):
-    try:
-        res = eval(ctx.message.content.split(None, 1)[1])
-    except Exception as e:
-        res = e
-        raise e
-    finally:
-        await ctx.send('```\n' + str(res) + '```')
+
 
 
 @bot.event
