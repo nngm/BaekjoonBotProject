@@ -10,6 +10,7 @@ import discord
 from discord.ext import commands
 
 import baekjoon as bj
+from constants import STEP_DATA
 
 # --- Bot Configuration ---
 bot_admins = {279832973841530880}
@@ -212,31 +213,16 @@ async def prefix(ctx: commands.Context, new_prefix: str):
 @bot.command(aliases=['s'])
 @commands.check(on_command_decorator)
 async def step(ctx: commands.Context, step_num: int = 0):
-    # This data can be moved to a config file or a cog
-    dic = [ 0, 1, 4, 3, 6,  5,  7,  8, 10, 19, 22,
-            9, 49, 50, 18, 34, 16, 48, 33, 11, 12,
-           20, 29, 13, 17, 24, 26, 59, 41, 23, 14,
-           15, 21, 45, 31, 27, 25, 40, 43, 35, 39,
-           47, 37, 38, 36, 42, 44, 60, 28, 30, 58,
-           32, 46]
-    titles = ["", "입출력과 사칙연산", "조건문", "반복문", "1차원 배열", "함수", "문자열", "기본 수학 1", "기본 수학 2",
-              "재귀", "브루트 포스", "정렬", "집합과 맵", "기하 1", "정수론 및 조합론", "백트래킹", "동적 계획법 1",
-              "누적 합", "그리디 알고리즘", "스택", "큐, 덱", "분할 정복", "이분 탐색", "우선순위 큐", "동적 계획법 2",
-              "그래프와 순회", "최단 경로", "투 포인터", "동적 계획법과 최단거리 역추적", "트리", "유니온 파인드",
-              "최소 신장 트리", "트리에서의 동적 계획법", "기하 2", "동적 계획법 3", "문자열 알고리즘 1", "위상 정렬",
-              "최소 공통 조상", "강한 연결 요소", "세그먼트 트리", "스위핑", "동적 계획법 4", "컨벡스 헐", "이분 매칭",
-              "네트워크 플로우", "MCMF", "더 어려운 수학", "고속 푸리에 변환", "문자열 알고리즘 2", "어려운 구간 쿼리",
-              "세그먼트 트리 (Hard)", "동적 계획법 최적화", "매우 어려운 자료구조와 알고리즘 (수정 예정)"]
     url = r"https://www.acmicpc.net/step"
     if step_num == 0:
         embed = discord.Embed()
         embed.set_author(name="단계별로 풀어보기", url=url)
         await ctx.send(content=url, embed=embed)
-    elif step_num < len(dic):
-        url += '/' + str(dic[step_num])
-        title = titles[step_num]
+    elif step_num < len(STEP_DATA["dic"]):
+        url += '/' + str(STEP_DATA["dic"][step_num])
+        title = STEP_DATA["titles"][step_num]
         embed = discord.Embed()
-        embed.set_author(name=f'{step_num}. ' + title, url=url)
+        embed.set_author(name=f'{step_num}. {title}', url=url)
         await ctx.send(content=url, embed=embed)
 
 @bot.command(aliases=['u'])
