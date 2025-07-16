@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Union
 
 @dataclass
 class Problem:
@@ -97,11 +98,11 @@ class TierData:
         "새싹": (0x96cc00, "<:sprout:999597535863783444>"),
     }
 
-    def get_by_level(self, level: int) -> tuple | None:
+    def get_by_level(self, level: int) -> Union[tuple, None]:
         """Efficiently get tier info by its numeric level."""
         return self._TIER_INFO_BY_LEVEL.get(level)
 
-    def get_by_name(self, name: str) -> tuple | None:
+    def get_by_name(self, name: str) -> Union[tuple, None]:
         """Get special tier info by name."""
         return self._SPECIAL_TIERS_BY_NAME.get(name)
 

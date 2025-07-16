@@ -1,7 +1,7 @@
 # https://solvedac.github.io/unofficial-documentation/
 
 import json
-from typing import List
+from typing import List, Union
 
 import requests
 import discord
@@ -12,7 +12,7 @@ ac_administrators = {'solvedac'}
 ac_notratable = {'startlink'}
 
 
-def get_user(user_name: str) -> User | None:
+def get_user(user_name: str) -> Union[User, None]:
     url = r"https://solved.ac/api/v3/user/show?handle=" + user_name
     response = requests.get(url, headers={'Content-Type': 'application/json'})
 
@@ -87,7 +87,7 @@ def create_user_embed(user: User) -> discord.Embed:
     return embed
 
 
-def get_problem(problem_id: str) -> Problem | None:
+def get_problem(problem_id: str) -> Union[Problem, None]:
     problem_id = str(int(problem_id))
     api_url = r"https://solved.ac/api/v3/problem/show?problemId=" + problem_id
     response = requests.get(
@@ -99,7 +99,7 @@ def get_problem(problem_id: str) -> Problem | None:
     return Problem.from_api_response(response.json())
 
 
-def search_tier(tier_range: str, arg: str) -> Problem | None:
+def search_tier(tier_range: str, arg: str) -> Union[Problem, None]:
     api_url = r"https://solved.ac/api/v3/search/problem?sort=random&query=solvable:true tier:"
     response = requests.get(api_url + tier_range + ' ' +
                             arg, headers={'Content-Type': 'application/json'})
