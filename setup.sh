@@ -13,7 +13,7 @@ if [ -f .env ]; then
 fi
 
 echo "Please enter your Discord bot token:"
-read -s -r DISCORD_TOKEN
+read -r DISCORD_TOKEN
 
 if [ -z "$DISCORD_TOKEN" ]; then
   echo "No token provided. Aborting."
